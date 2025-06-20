@@ -37,7 +37,7 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: height ?? 44,
+      height: height ?? 50,
       width: width ?? double.maxFinite,
       child: ElevatedButton(
         style: ButtonStyle(
@@ -50,7 +50,7 @@ class CustomButton extends StatelessWidget {
           padding: WidgetStatePropertyAll(EdgeInsets.all(padding ?? 8)),
           shape: WidgetStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(radious ?? 8),
+              borderRadius: BorderRadius.circular(radious ?? 16),
             ),
           ),
           backgroundColor: WidgetStatePropertyAll(

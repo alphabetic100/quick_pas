@@ -98,7 +98,7 @@ class BuildOnbording extends StatelessWidget {
         children: [
           TextSpan(
             text: firstText,
-            style: TextStyle(color: AppColors.textSecondary, fontSize: 55),
+            style: TextStyle(color: AppColors.secondaryColor, fontSize: 55),
           ),
           TextSpan(
             text: colorText,
@@ -106,7 +106,7 @@ class BuildOnbording extends StatelessWidget {
           ),
           TextSpan(
             text: lastText,
-            style: TextStyle(color: AppColors.textSecondary, fontSize: 55),
+            style: TextStyle(color: AppColors.secondaryColor, fontSize: 55),
           ),
         ],
       ),

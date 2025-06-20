@@ -1,0 +1,62 @@
+import 'package:flutter/material.dart';
+import 'package:quick_pass/src/app/core/common/screens/common_bg_screen.dart';
+import 'package:quick_pass/src/app/core/common/widgets/custom_button.dart';
+import 'package:quick_pass/src/app/core/common/widgets/custom_text.dart';
+import 'package:quick_pass/src/app/core/common/widgets/custom_text_form_field.dart';
+import 'package:quick_pass/src/app/core/constants/assets/font_family.dart';
+import 'package:quick_pass/src/app/core/utils/colors/app_colors.dart';
+
+class ChangePasswordScreen extends StatelessWidget {
+  const ChangePasswordScreen({super.key});
+  static const String routeName = "/profile/change-master-pass";
+  @override
+  Widget build(BuildContext context) {
+    return CommonBgScreen(
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomText(
+              text: "CHANGE \nPASSWORD",
+              fontFamily: FontFamily.bebasNeue,
+              color: AppColors.secondaryColor,
+              fontSize: 55,
+            ),
+            SizedBox(height: 30),
+            CustomText(
+              text: "Current Password",
+              fontFamily: FontFamily.bebasNeue,
+              color: AppColors.secondaryColor,
+            ),
+            CustomTextFormField(
+              controller: TextEditingController(),
+              hintText: "*******",
+            ),
+            SizedBox(height: 16),
+            CustomText(
+              text: "New Password",
+              fontFamily: FontFamily.bebasNeue,
+              color: AppColors.secondaryColor,
+            ),
+            CustomTextFormField(
+              controller: TextEditingController(),
+              hintText: "*******",
+            ),
+            SizedBox(height: 16),
+            CustomText(
+              text: "Confirm Password",
+              fontFamily: FontFamily.bebasNeue,
+              color: AppColors.secondaryColor,
+            ),
+            CustomTextFormField(
+              controller: TextEditingController(),
+              hintText: "*******",
+            ),
+            SizedBox(height: 40),
+            CustomButton(onTap: () {}, title: "CHANGE PASSWORD"),
+          ],
+        ),
+      ),
+    );
+  }
+}
