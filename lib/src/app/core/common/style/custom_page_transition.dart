@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class CustomPageTransitions {
-  static CustomTransitionPage build<T>(GoRouterState state, Widget child) {
+  static CustomTransitionPage build<T>(  state, Widget child) {
     return CustomTransitionPage<T>(
       key: state.pageKey,
       child: child,

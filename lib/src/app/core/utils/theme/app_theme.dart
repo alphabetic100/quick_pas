@@ -9,11 +9,19 @@ class AppTheme {
     primaryColor: AppColors.primaryColor,
     scaffoldBackgroundColor: AppColors.scaffoldBgLight,
     fontFamily: GoogleFonts.bebasNeue().fontFamily,
+    appBarTheme: AppBarTheme(
+      backgroundColor: Colors.white,
+      surfaceTintColor: Colors.white,
+    ),
   );
 
   static ThemeData darkTheme = ThemeData(
     primaryColor: AppColors.scaffoldBgDark,
     scaffoldBackgroundColor: AppColors.scaffoldBgDark,
     fontFamily: GoogleFonts.bebasNeue().fontFamily,
+    appBarTheme: AppBarTheme(
+      backgroundColor: AppColors.secondaryColor,
+      surfaceTintColor: AppColors.secondaryColor,
+    ),
   );
 }

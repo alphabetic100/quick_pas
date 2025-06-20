@@ -40,6 +40,69 @@ class AppRoute {
             (context, state) =>
                 CustomPageTransitions.build(state, ForgetPasswordScreen()),
       ),
+
+      GoRoute(
+        path: HomeScreen.routeName,
+        pageBuilder:
+            (context, state) =>
+                CustomPageTransitions.build(state, HomeScreen()),
+      ),
+
+      GoRoute(
+        path: ProfileScreen.routeName,
+        pageBuilder:
+            (context, state) =>
+                CustomPageTransitions.build(state, ProfileScreen()),
+      ),
+
+      GoRoute(
+        path: AddPassScreen.routeName,
+        pageBuilder:
+            (context, state) =>
+                CustomPageTransitions.build(state, AddPassScreen()),
+      ),
+
+      GoRoute(
+        path: UpdateProfileScreen.routeName,
+        pageBuilder:
+            (context, state) =>
+                CustomPageTransitions.build(state, UpdateProfileScreen()),
+      ),
+
+      GoRoute(
+        path: ChangePasswordScreen.routeName,
+        pageBuilder:
+            (context, state) =>
+                CustomPageTransitions.build(state, ChangePasswordScreen()),
+      ),
+
+      GoRoute(
+        path: AutofillSettingScreen.routeName,
+        pageBuilder:
+            (context, state) =>
+                CustomPageTransitions.build(state, AutofillSettingScreen()),
+      ),
+
+      GoRoute(
+        path: GeneratePasswordScreen.routeName,
+        pageBuilder:
+            (context, state) =>
+                CustomPageTransitions.build(state, GeneratePasswordScreen()),
+      ),
+
+      GoRoute(
+        path: PassDetailsScreen.routeName,
+        pageBuilder:
+            (context, state) =>
+                CustomPageTransitions.build(state, PassDetailsScreen()),
+      ),
+
+      GoRoute(
+        path: EditPassDetailsScreen.routeName,
+        pageBuilder:
+            (context, state) =>
+                CustomPageTransitions.build(state, EditPassDetailsScreen()),
+      ),
     ],
   );
 }

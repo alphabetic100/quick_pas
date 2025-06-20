@@ -8,6 +8,7 @@ import 'package:quick_pass/src/app/core/constants/assets/icon_path.dart';
 import 'package:quick_pass/src/app/core/utils/colors/app_colors.dart';
 import 'package:quick_pass/src/app/core/utils/sizes/screen_spacer.dart';
 import 'package:quick_pass/src/app/features/authentication/presentation/screens/login_screen.dart';
+import 'package:quick_pass/src/app/features/home/presentation/screens/home_screen.dart';
 
 class SignupScreen extends StatelessWidget {
   SignupScreen({super.key});
@@ -73,7 +74,12 @@ class SignupScreen extends StatelessWidget {
                   ),
 
                   VerticalSpace(height: 26),
-                  CustomButton(onTap: () {}, title: "REGISTER"),
+                  CustomButton(
+                    onTap: () {
+                      context.go(HomeScreen.routeName);
+                    },
+                    title: "REGISTER",
+                  ),
                   VerticalSpace(height: 30),
                   Center(
                     child: CustomText(

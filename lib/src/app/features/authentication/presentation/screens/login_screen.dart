@@ -9,6 +9,7 @@ import 'package:quick_pass/src/app/core/utils/colors/app_colors.dart';
 import 'package:quick_pass/src/app/core/utils/sizes/screen_spacer.dart';
 import 'package:quick_pass/src/app/features/authentication/presentation/screens/forget_password_screen.dart';
 import 'package:quick_pass/src/app/features/authentication/presentation/screens/signup_screen.dart';
+import 'package:quick_pass/src/app/features/home/presentation/screens/home_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
@@ -72,7 +73,12 @@ class LoginScreen extends StatelessWidget {
                   ),
 
                   VerticalSpace(height: 26),
-                  CustomButton(onTap: () {}, title: "LOGIN"),
+                  CustomButton(
+                    onTap: () {
+                      context.go(HomeScreen.routeName);
+                    },
+                    title: "LOGIN",
+                  ),
                   VerticalSpace(height: 30),
                   Center(
                     child: CustomText(

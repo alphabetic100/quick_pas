@@ -69,7 +69,7 @@ class CustomTextFormField extends StatelessWidget {
         style: GoogleFonts.poppins(
           fontSize: (16),
           fontWeight: FontWeight.w400,
-          color: isDarkMode ? Colors.white : AppColors.textSecondary,
+          color: isDarkMode ? Colors.white : AppColors.secondaryColor,
         ),
         validator: validator,
         autovalidateMode: AutovalidateMode.onUserInteraction,
