@@ -24,15 +24,21 @@ class AppRoute {
         onExit: (context, state) => true,
         pageBuilder:
             (context, state) =>
-                CustomPageTransitions.build(state, const LoginScreen()),
+                CustomPageTransitions.build(state, LoginScreen()),
       ),
 
       GoRoute(
         path: SignupScreen.routeName,
-
         pageBuilder:
             (context, state) =>
-                CustomPageTransitions.build(state, const SignupScreen()),
+                CustomPageTransitions.build(state, SignupScreen()),
+      ),
+
+      GoRoute(
+        path: ForgetPasswordScreen.routeName,
+        pageBuilder:
+            (context, state) =>
+                CustomPageTransitions.build(state, ForgetPasswordScreen()),
       ),
     ],
   );

@@ -1,6 +1,6 @@
 # QUICK PASS
 
-![QUICK PASS Cover](./Cover.png)
+![QUICK PASS Cover](https://github.com/alphabetic100/quick_pas/blob/main/Cover.png)
 
 **QUICK PASS** is a professionally designed password manager UI Kit developed to streamline how users manage and store their passwords. This solution emphasizes usability, security, and interface clarity across both light and dark modes. With over 45+ production-ready screens, it serves as a complete frontend template for any password management mobile application.
 

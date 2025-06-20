@@ -50,7 +50,7 @@ class CustomButton extends StatelessWidget {
           padding: WidgetStatePropertyAll(EdgeInsets.all(padding ?? 8)),
           shape: WidgetStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(radious ?? 8),
+              borderRadius: BorderRadius.circular(radious ?? 16),
             ),
           ),
           backgroundColor: WidgetStatePropertyAll(
