@@ -1,0 +1,3 @@
+class SuperbaseConst {
+  SuperbaseConst._();
+}

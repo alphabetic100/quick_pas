@@ -1,0 +1,60 @@
+name: quick_pass
+description: "A Password Manager App for Android and iOS"
+publish_to: 'none'
+
+version: 1.0.0
+
+environment:
+  sdk: ^3.7.2
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # flutter packages
+
+  # cupertion icons
+  cupertino_icons: ^1.0.8
+  # Secure storage for store sensitive data
+  flutter_secure_storage: ^9.2.4
+  # State management
+  flutter_riverpod: ^2.6.1
+  # Routing
+  go_router: ^15.2.3
+  # Fonts Libreary
+  google_fonts: ^6.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+  flutter_lints: ^5.0.0
+
+
+flutter:
+
+
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/logos/
+
+
+
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  
+
