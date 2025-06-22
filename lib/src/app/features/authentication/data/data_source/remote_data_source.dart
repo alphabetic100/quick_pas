@@ -10,7 +10,38 @@ class RemoteDataSource {
     required String password,
   }) async {
     log("Login request with email: $email and password: $password");
+    try {
+      final response = await supabase.auth.signInWithPassword(
+        email: email,
+        password: password,
+      );
+      final user = response.user;
+      final accessToken = response.session?.accessToken ?? "";
 
+      if (user != null) {
+        try {
+          final response =
+              await supabase
+                  .from("user")
+                  .select()
+                  .eq("user_id", user.id)
+                  .single();
+
+          return UserModel(
+            id: user.id,
+            fullName: response['fullName'] ?? "",
+            profileImage: "",
+            email: email,
+            createdAt: "",
+            accessToken: accessToken,
+          );
+        } catch (error) {
+          log(error.toString());
+        }
+      }
+    } catch (error) {
+      log(error.toString());
+    }
     return UserModel.empty();
   }
 

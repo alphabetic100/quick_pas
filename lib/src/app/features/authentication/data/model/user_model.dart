@@ -43,7 +43,7 @@ class UserModel {
     required String password,
   }) {
     return {
-      'userId': id,
+      'user_id': id,
       'fullName': fullName,
       'email': email,
       'password': password,
