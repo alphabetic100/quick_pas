@@ -5,10 +5,12 @@ import 'package:quick_pass/src/app/core/constants/assets/font_family.dart';
 import 'package:quick_pass/src/app/core/constants/assets/icon_path.dart';
 import 'package:quick_pass/src/app/core/utils/colors/app_colors.dart';
 import 'package:quick_pass/src/app/core/utils/sizes/screen_spacer.dart';
+import 'package:quick_pass/src/app/features/authentication/presentation/screens/login_screen.dart';
 import 'package:quick_pass/src/app/features/profile/presentation/components/custom_profile_card.dart';
 import 'package:quick_pass/src/app/features/profile/presentation/screen/autofill_setting_screen.dart';
 import 'package:quick_pass/src/app/features/profile/presentation/screen/change_password_screen.dart';
 import 'package:quick_pass/src/app/features/profile/presentation/screen/update_profile_screen.dart';
+import 'package:quick_pass/src/app/service/secure_sotrage_service.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -91,7 +93,10 @@ class ProfileScreen extends StatelessWidget {
             CustomProfileCard(
               iconaPath: IconPath.logout,
               title: "Logout",
-              onTap: () {},
+              onTap: () {
+                SecureStorageService.instance.clearToken();
+                context.go(LoginScreen.routeName);
+              },
             ),
             Spacer(),
             CustomText(text: "v 1.0.0", fontSize: 12),

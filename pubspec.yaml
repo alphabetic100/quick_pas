@@ -24,7 +24,11 @@ dependencies:
   go_router: ^15.2.3
   # Fonts Libreary
   google_fonts: ^6.2.1
+  #Pick Image
   image_picker: ^1.1.2
+  #Database --> Supabase
+  
+  supabase_flutter: ^2.9.1
 
 dev_dependencies:
   flutter_test:
