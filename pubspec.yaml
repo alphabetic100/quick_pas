@@ -27,8 +27,9 @@ dependencies:
   #Pick Image
   image_picker: ^1.1.2
   #Database --> Supabase
-  
   supabase_flutter: ^2.9.1
+  #Biometric Authentication
+  local_auth: ^2.3.0
 
 dev_dependencies:
   flutter_test:

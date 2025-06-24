@@ -2,7 +2,8 @@
 
 <!-- Internet permission -->
     <uses-permission android:name="android.permission.INTERNET"/>
-
+<!-- Biometric Permission -->\
+      <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
     <application
         android:label="quick_pass"
         android:name="${applicationName}"

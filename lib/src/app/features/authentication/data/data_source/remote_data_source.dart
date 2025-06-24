@@ -36,11 +36,12 @@ class RemoteDataSource {
             accessToken: accessToken,
           );
         } catch (error) {
-          log(error.toString());
+          log("${error}noo");
         }
       }
-    } catch (error) {
-      log(error.toString());
+    } on AuthApiException catch (error) {
+      log(error.statusCode.toString());
+      log("${error}From here");
     }
     return UserModel.empty();
   }
@@ -83,7 +84,7 @@ class RemoteDataSource {
           log(error.toString());
         }
       }
-    } catch (error) {
+    } on AuthApiException catch (error) {
       log(error.toString());
     }
     return UserModel.empty();
