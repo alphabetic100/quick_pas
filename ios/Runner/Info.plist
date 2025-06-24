@@ -45,5 +45,8 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<!-- Custom permission starts from here -->
+	<key>NSFaceIDUsageDescription</key>
+	<string>Biometric authentication is required to securely access your saved credentials.</string>
 </dict>
 </plist>

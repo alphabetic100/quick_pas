@@ -68,6 +68,7 @@ class LoginScreen extends ConsumerWidget {
                     controller: controllers.password,
                     hintText: "Password",
                     validator: TextFieldValidator.validatePassword,
+                    obscureText: state.passVisibility,
                     suffixIcon: GestureDetector(
                       onTap: () {
                         ref.read(loginProvider.notifier).toggleVisibility();
