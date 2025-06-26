@@ -57,6 +57,7 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
           message: "Account registration successfull",
         );
         await SecureStorageService.instance.saveToken(token: user.accessToken);
+        await SecureStorageService.instance.saveUserId(userId: user.userId);
         // ignore: use_build_context_synchronously
         context.go(HomeScreen.routeName);
         //Ask for the Fingerprint access

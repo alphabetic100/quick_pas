@@ -7,8 +7,14 @@ import 'package:quick_pass/src/app/core/utils/colors/app_colors.dart';
 import 'package:quick_pass/src/app/core/utils/sizes/screen_spacer.dart';
 
 class PasswordCard extends StatelessWidget {
-  const PasswordCard({super.key, required this.title, required this.onTap});
+  const PasswordCard({
+    super.key,
+    required this.title,
+    required this.onTap,
+    required this.password,
+  });
   final String title;
+  final String password;
   final VoidCallback onTap;
 
   @override
@@ -51,7 +57,7 @@ class PasswordCard extends StatelessWidget {
             Spacer(),
             InkWell(
               onTap: () {
-                Clipboard.setData(ClipboardData(text: "Your_Password"));
+                Clipboard.setData(ClipboardData(text: password));
               },
               child: Icon(Icons.copy, color: AppColors.primaryColor),
             ),

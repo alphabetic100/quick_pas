@@ -30,6 +30,7 @@ class UserModel {
 
   User toEntity() {
     return User(
+      userId: id,
       userName: fullName,
       profileImage: profileImage,
       accessToken: accessToken,

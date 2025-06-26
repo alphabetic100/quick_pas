@@ -24,6 +24,7 @@ class CustomTextFormField extends StatelessWidget {
   final TextStyle? suffixTextStyle;
   final String? Function(String?)? validator;
   final Widget? prefixIcon;
+  final Function()? onTap;
 
   const CustomTextFormField({
     super.key,
@@ -47,6 +48,7 @@ class CustomTextFormField extends StatelessWidget {
     this.suffixTextStyle,
     this.validator,
     this.prefixIcon,
+    this.onTap,
   });
 
   @override
@@ -60,6 +62,7 @@ class CustomTextFormField extends StatelessWidget {
         borderRadius: BorderRadius.circular(4),
       ),
       child: TextFormField(
+        onTap: onTap,
         controller: controller,
         readOnly: readonly,
         obscureText: obscureText,

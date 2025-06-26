@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:quick_pass/src/app/core/constants/assets/icon_path.dart';
 import 'package:quick_pass/src/app/core/utils/sizes/screen_spacer.dart';
 
@@ -15,7 +16,10 @@ class CommonBgScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.asset(IconPath.passIcon, height: 40),
+              GestureDetector(
+                onTap: context.canPop() ? () => context.pop() : null,
+                child: Image.asset(IconPath.passIcon, height: 40),
+              ),
               VerticalSpace(height: 20),
               Expanded(child: child),
             ],
