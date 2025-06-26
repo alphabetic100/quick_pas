@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:quick_pass/src/app/core/constants/database/superbase_const.dart';
 import 'package:quick_pass/src/app/features/authentication/data/model/user_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -22,7 +23,7 @@ class RemoteDataSource {
         try {
           final response =
               await supabase
-                  .from("user")
+                  .from(SupabaseConst.userCollection)
                   .select()
                   .eq("user_id", user.id)
                   .single();
@@ -63,7 +64,7 @@ class RemoteDataSource {
       if (user != null) {
         try {
           await supabase
-              .from("user")
+              .from(SupabaseConst.userCollection)
               .insert(
                 UserModel.toJson(
                   id: user.id,

@@ -90,18 +90,27 @@ class AppRoute {
                 CustomPageTransitions.build(state, GeneratePasswordScreen()),
       ),
 
-      GoRoute(
-        path: PassDetailsScreen.routeName,
-        pageBuilder:
-            (context, state) =>
-                CustomPageTransitions.build(state, PassDetailsScreen()),
-      ),
-
+      // GoRoute(
+      //   path: PassDetailsScreen.routeName,
+      //   pageBuilder:
+      //       (context, state) =>
+      //           CustomPageTransitions.build(state, PassDetailsScreen(
+      //             passwordData: data[index],
+      //           )),
+      // ),
       GoRoute(
         path: EditPassDetailsScreen.routeName,
         pageBuilder:
             (context, state) =>
                 CustomPageTransitions.build(state, EditPassDetailsScreen()),
+      ),
+
+      GoRoute(
+        path: SearchScreen.routeName,
+
+        pageBuilder:
+            (context, state) =>
+                CustomPageTransitions.build(state, SearchScreen()),
       ),
     ],
   );
