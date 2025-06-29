@@ -4,7 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:quick_pass/src/app/core/common/screens/common_bg_screen.dart';
 import 'package:quick_pass/src/app/core/common/widgets/custom_text.dart';
 import 'package:quick_pass/src/app/core/common/widgets/custom_text_form_field.dart';
+import 'package:quick_pass/src/app/core/constants/assets/font_family.dart';
 import 'package:quick_pass/src/app/core/constants/assets/icon_path.dart';
+import 'package:quick_pass/src/app/core/constants/assets/image_path.dart';
+import 'package:quick_pass/src/app/core/utils/colors/app_colors.dart';
 import 'package:quick_pass/src/app/core/utils/sizes/screen_spacer.dart';
 import 'package:quick_pass/src/app/features/details&upgrade/presentation/screens/pass_details_screen.dart';
 import 'package:quick_pass/src/app/features/home/presentation/components/password_card.dart';
@@ -63,7 +66,7 @@ class HomeScreenBody extends ConsumerWidget {
             homeState.when(
               data:
                   (data) =>
-                      data != null
+                      data != null && data.isNotEmpty
                           ? ListView.separated(
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
@@ -85,6 +88,27 @@ class HomeScreenBody extends ConsumerWidget {
                               return SizedBox(height: 20);
                             },
                             itemCount: data.length,
+                          )
+                          : data!.isEmpty
+                          ? Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              VerticalSpace(height: 10),
+                              Image.asset(ImagePath.emptySearch),
+                              VerticalSpace(height: 20),
+                              CustomText(
+                                text: "Empty List",
+                                fontWeight: FontWeight.bold,
+                                fontFamily: FontFamily.bebasNeue,
+                                fontSize: 30,
+                                color: AppColors.secondaryColor,
+                              ),
+                              CustomText(
+                                text: "No saved password found!",
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.textSecondary,
+                              ),
+                            ],
                           )
                           : Center(
                             child: CustomText(
