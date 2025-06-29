@@ -1,5 +1,6 @@
 class PasswordModel {
   final int id;
+  final String passId;
   final String createdAt;
   final String updatedAt;
   final String userId;
@@ -10,6 +11,7 @@ class PasswordModel {
 
   PasswordModel({
     required this.id,
+    required this.passId,
     required this.createdAt,
     required this.updatedAt,
     required this.userId,
@@ -22,6 +24,7 @@ class PasswordModel {
   factory PasswordModel.fromJson(Map<String, dynamic> json) {
     return PasswordModel(
       id: json['id'] ?? 0,
+      passId: json['pass_id'] ?? '',
       createdAt: json['created_at'] ?? '',
       updatedAt: json['updated_at'] ?? '',
       userId: json['user_id'] ?? '',

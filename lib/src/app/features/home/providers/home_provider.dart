@@ -16,6 +16,7 @@ final allPasswordPrivider = FutureProvider((ref) async {
         .select()
         .eq("user_id", SecureStorageService.instance.userId);
     if (response.isNotEmpty) {
+      log(response.toString());
       passwords = PasswordModel.fromJsonList(response);
     }
     return passwords;

@@ -8,6 +8,8 @@ import 'package:quick_pass/src/app/core/constants/assets/font_family.dart';
 import 'package:quick_pass/src/app/core/helpers/app_helper.dart';
 import 'package:quick_pass/src/app/core/utils/colors/app_colors.dart';
 import 'package:quick_pass/src/app/core/utils/sizes/screen_spacer.dart';
+import 'package:quick_pass/src/app/features/details&upgrade/controller/update_pass_controller.dart';
+import 'package:quick_pass/src/app/features/details&upgrade/presentation/screens/edit_pass_details_screen.dart';
 import 'package:quick_pass/src/app/features/home/data/home_pass_data_mode.dart';
 
 class PassDetailsScreen extends ConsumerWidget {
@@ -90,7 +92,11 @@ class PassDetailsScreen extends ConsumerWidget {
             children: [
               Expanded(
                 child: CustomButton(
-                  onTap: () {},
+                  onTap: () {
+                    ref
+                        .watch(updateControllers)
+                        .deletePass(context: context, password: passwordData);
+                  },
                   title: "Delete",
                   isPrimary: false,
                   titleColor: AppColors.primaryColor,
@@ -98,7 +104,17 @@ class PassDetailsScreen extends ConsumerWidget {
               ),
 
               HorizontalSpace(width: 18),
-              Expanded(child: CustomButton(onTap: () {}, title: "Update")),
+              Expanded(
+                child: CustomButton(
+                  onTap: () {
+                    context.push(EditPassDetailsScreen.routeName);
+                    ref
+                        .watch(updateControllers)
+                        .assignValue(password: passwordData);
+                  },
+                  title: "Update",
+                ),
+              ),
             ],
           ),
         ),
