@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quick_pass/src/app/core/common/widgets/custom_text.dart';
 import 'package:quick_pass/src/app/core/constants/assets/font_family.dart';
@@ -7,16 +8,19 @@ import 'package:quick_pass/src/app/core/utils/colors/app_colors.dart';
 import 'package:quick_pass/src/app/core/utils/sizes/screen_spacer.dart';
 import 'package:quick_pass/src/app/features/authentication/presentation/screens/login_screen.dart';
 import 'package:quick_pass/src/app/features/profile/presentation/components/custom_profile_card.dart';
+import 'package:quick_pass/src/app/features/profile/presentation/components/user_profile_shimmer.dart';
 import 'package:quick_pass/src/app/features/profile/presentation/screen/autofill_setting_screen.dart';
 import 'package:quick_pass/src/app/features/profile/presentation/screen/change_password_screen.dart';
 import 'package:quick_pass/src/app/features/profile/presentation/screen/update_profile_screen.dart';
+import 'package:quick_pass/src/app/features/profile/providers/get_profile_provider.dart';
 import 'package:quick_pass/src/app/service/secure_sotrage_service.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
   static const String routeName = "/profile";
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final profileData = ref.watch(getProfile);
     return SafeArea(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.0),
@@ -31,35 +35,66 @@ class ProfileScreen extends StatelessWidget {
             ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.25,
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.1,
-                      width: MediaQuery.of(context).size.height * 0.1,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: AppColors.primaryColor,
-                          width: 4,
-                        ),
-                        borderRadius: BorderRadius.circular(25),
-                        image: DecorationImage(
-                          image: AssetImage(IconPath.userIcon),
-                          scale: 2,
-                        ),
+              child: profileData.when(
+                data: (data) {
+                  if (data != null) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: MediaQuery.of(context).size.height * 0.1,
+                            width: MediaQuery.of(context).size.height * 0.1,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: AppColors.primaryColor,
+                                width: 4,
+                              ),
+                              borderRadius: BorderRadius.circular(25),
+                              image: DecorationImage(
+                                image:
+                                    data.profileImage.isNotEmpty
+                                        ? NetworkImage(data.profileImage)
+                                        : AssetImage(IconPath.userIcon),
+                                scale: data.profileImage.isNotEmpty ? 2 : 2,
+                                fit:
+                                    data.profileImage.isNotEmpty
+                                        ? BoxFit.cover
+                                        : null,
+                                onError:
+                                    (exception, stackTrace) =>
+                                        AssetImage(IconPath.userIcon),
+                              ),
+                            ),
+                          ),
+                          VerticalSpace(height: 10),
+                          CustomText(
+                            text: data.fullName,
+                            fontFamily: FontFamily.bebasNeue,
+                            fontSize: 32,
+                            color: AppColors.secondaryColor,
+                          ),
+                          CustomText(text: data.email, fontSize: 14),
+                        ],
+                      ),
+                    );
+                  } else {
+                    return CustomText(
+                      text:
+                          "Something went wrong, please check your internet and try again",
+                      textAlign: TextAlign.center,
+                    );
+                  }
+                },
+                error:
+                    (error, stackTrace) => Center(
+                      child: CustomText(
+                        text:
+                            "Something went wrong, please check your internet and try again",
+                        textAlign: TextAlign.center,
                       ),
                     ),
-                    VerticalSpace(height: 10),
-                    CustomText(
-                      text: "Jhon doe",
-                      fontFamily: FontFamily.bebasNeue,
-                      fontSize: 32,
-                      color: AppColors.secondaryColor,
-                    ),
-                    CustomText(text: "example@gmail.com", fontSize: 14),
-                  ],
-                ),
+                loading: () => UserProfileShimmer(),
               ),
             ),
             VerticalSpace(height: 20),
@@ -67,7 +102,13 @@ class ProfileScreen extends StatelessWidget {
               iconaPath: IconPath.userIcon,
               title: "Update Profile",
               onTap: () {
-                context.push(UpdateProfileScreen.routeName);
+                context.push(
+                  UpdateProfileScreen.routeName,
+                  extra: {
+                    "fullName": profileData.value!.fullName,
+                    "image": profileData.value!.profileImage,
+                  },
+                );
               },
             ),
             CustomProfileCard(

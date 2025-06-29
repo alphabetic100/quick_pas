@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -13,11 +14,19 @@ import 'package:quick_pass/src/app/core/utils/sizes/screen_spacer.dart';
 import 'package:quick_pass/src/app/features/profile/providers/update_profile_provider.dart';
 
 class UpdateProfileScreen extends ConsumerWidget {
-  const UpdateProfileScreen({super.key});
+  UpdateProfileScreen(this.fullName, this.profileImage, {super.key}) {
+    name.text = fullName;
+  }
   static const String routeName = "/profile/update";
+  final name = TextEditingController();
+  final String fullName;
+  final String profileImage;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final String profilePath = ref.watch(UpdateProfileProvider.profilePicture);
+    log("Profile image is: $profileImage");
+
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
@@ -56,7 +65,14 @@ class UpdateProfileScreen extends ConsumerWidget {
                             image:
                                 profilePath.isNotEmpty
                                     ? FileImage(File(profilePath))
+                                    : profileImage.isNotEmpty
+                                    ? NetworkImage(profileImage)
                                     : AssetImage(IconPath.userIcon),
+                            fit:
+                                profilePath.isNotEmpty ||
+                                        profileImage.isNotEmpty
+                                    ? BoxFit.cover
+                                    : null,
                           ),
                         ),
                       ),
@@ -79,10 +95,7 @@ class UpdateProfileScreen extends ConsumerWidget {
                   fontFamily: FontFamily.bebasNeue,
                   color: AppColors.secondaryColor,
                 ),
-                CustomTextFormField(
-                  controller: TextEditingController(),
-                  hintText: "Jhon Doe",
-                ),
+                CustomTextFormField(controller: name, hintText: "Jhon Doe"),
                 VerticalSpace(height: MediaQuery.of(context).size.height * 0.2),
               ],
             ),
@@ -108,7 +121,12 @@ class UpdateProfileScreen extends ConsumerWidget {
               Expanded(
                 child: CustomButton(
                   onTap: () {
-                    context.pop();
+                    UpdateProfileProvider().updateProfile(
+                      context: context,
+                      ref: ref,
+                      name: name.text.trim(),
+                      priviousImage: profileImage,
+                    );
                   },
                   title: "save",
                 ),
