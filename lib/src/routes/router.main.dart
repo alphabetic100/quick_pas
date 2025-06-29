@@ -65,8 +65,13 @@ class AppRoute {
       GoRoute(
         path: UpdateProfileScreen.routeName,
         pageBuilder:
-            (context, state) =>
-                CustomPageTransitions.build(state, UpdateProfileScreen()),
+            (context, state) => CustomPageTransitions.build(
+              state,
+              UpdateProfileScreen(
+                (state.extra as Map<String, dynamic>)['fullName'],
+                (state.extra as Map<String, dynamic>)['image'],
+              ),
+            ),
       ),
 
       GoRoute(

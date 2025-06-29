@@ -6,4 +6,7 @@ class SupabaseConst {
 
   static const String userCollection = "user";
   static const String passwordCollection = "passwords";
+
+  //Storage bucket
+  static const String avater = "avaters";
 }
