@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quick_pass/src/app/core/utils/colors/app_colors.dart';
+import 'package:quick_pass/src/app/service/theme_preferance.dart';
 
 class CustomTextFormField extends StatelessWidget {
   final TextEditingController controller;
@@ -42,7 +43,7 @@ class CustomTextFormField extends StatelessWidget {
     this.enabledBorder,
     this.focusedBorder,
     this.containerColor = const Color(0xffF9FAFB),
-    this.hintTextColor = AppColors.textSecondary,
+    this.hintTextColor,
     this.hintTextSize = 15,
     this.suffixText,
     this.suffixTextStyle,
@@ -53,12 +54,12 @@ class CustomTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    // final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Container(
       width: double.maxFinite,
       //   padding: EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
-        // color: isDarkMode ? Color(0xff171717) : Color(0xffF9FAFB),
+        //color: isDarkMode ? Color(0xff171717) : Color(0xffF9FAFB),
         borderRadius: BorderRadius.circular(4),
       ),
       child: TextFormField(
@@ -72,13 +73,19 @@ class CustomTextFormField extends StatelessWidget {
         style: GoogleFonts.poppins(
           fontSize: (16),
           fontWeight: FontWeight.w400,
-          color: isDarkMode ? Colors.white : AppColors.secondaryColor,
+          color:
+              ThemePreferance.instance.isDarkMode
+                  ? Colors.white
+                  : AppColors.secondaryColor,
         ),
         validator: validator,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         decoration: InputDecoration(
           filled: true,
-          fillColor: isDarkMode ? Color(0xff282828) : Colors.white,
+          fillColor:
+              ThemePreferance.instance.isDarkMode
+                  ? Colors.white.withValues(alpha: 0.2)
+                  : Colors.white,
           prefixIcon:
               prefixIcon ??
               ((prefixIconPath != null)
@@ -92,6 +99,10 @@ class CustomTextFormField extends StatelessWidget {
                           prefixIconPath!,
                           height: (26),
                           width: (26),
+                          color:
+                              ThemePreferance.instance.isDarkMode
+                                  ? Colors.white
+                                  : null,
                         ),
                       ),
                       //  SizedBox(width: getWidth(10)),
@@ -111,7 +122,11 @@ class CustomTextFormField extends StatelessWidget {
           hintStyle: GoogleFonts.poppins(
             fontSize: (hintTextSize ?? 15),
             fontWeight: FontWeight.w400,
-            color: hintTextColor ?? AppColors.textSecondary,
+            color:
+                hintTextColor ??
+                (ThemePreferance.instance.isDarkMode
+                    ? Colors.white
+                    : AppColors.textSecondary),
           ),
           border:
               border ??

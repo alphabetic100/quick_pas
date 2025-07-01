@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:quick_pass/src/app/core/common/widgets/custom_text.dart';
 import 'package:quick_pass/src/app/core/constants/assets/font_family.dart';
 import 'package:quick_pass/src/app/core/utils/colors/app_colors.dart';
+import 'package:quick_pass/src/app/service/theme_preferance.dart';
 
 class PasswordStoredCard extends StatelessWidget {
   const PasswordStoredCard({
@@ -17,7 +18,10 @@ class PasswordStoredCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       decoration: BoxDecoration(
-        color: Color(0xFFF1F1F1),
+        color:
+            ThemePreferance.instance.isDarkMode
+                ? Colors.white.withValues(alpha: 0.2)
+                : Color(0xFFF1F1F1),
         borderRadius: BorderRadius.circular(25),
       ),
       child: Column(
@@ -30,7 +34,13 @@ class PasswordStoredCard extends StatelessWidget {
             fontFamily: FontFamily.bebasNeue,
             color: AppColors.primaryColor,
           ),
-          CustomText(text: title, color: AppColors.secondaryColor),
+          CustomText(
+            text: title,
+            color:
+                ThemePreferance.instance.isDarkMode
+                    ? Colors.white
+                    : AppColors.secondaryColor,
+          ),
         ],
       ),
     );

@@ -9,6 +9,7 @@ import 'package:quick_pass/src/app/core/constants/assets/font_family.dart';
 import 'package:quick_pass/src/app/core/utils/colors/app_colors.dart';
 import 'package:quick_pass/src/app/core/utils/sizes/screen_spacer.dart';
 import 'package:quick_pass/src/app/features/add_pass/providers/generate_pass_provider.dart';
+import 'package:quick_pass/src/app/service/theme_preferance.dart';
 
 class GeneratePasswordScreen extends ConsumerWidget {
   const GeneratePasswordScreen({super.key});
@@ -20,7 +21,10 @@ class GeneratePasswordScreen extends ConsumerWidget {
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () => context.pop(),
-          child: Icon(Icons.arrow_back_ios),
+          child: Icon(
+            Icons.arrow_back_ios,
+            color: ThemePreferance.instance.isDarkMode ? Colors.white : null,
+          ),
         ),
       ),
 
@@ -49,7 +53,10 @@ class GeneratePasswordScreen extends ConsumerWidget {
                         generator.generatedPassword.isNotEmpty
                             ? generator.generatedPassword
                             : "generated_pass",
-                    color: AppColors.secondaryColor,
+                    color:
+                        ThemePreferance.instance.isDarkMode
+                            ? Colors.white
+                            : AppColors.secondaryColor,
                   ),
                 ),
               ),
@@ -70,19 +77,28 @@ class GeneratePasswordScreen extends ConsumerWidget {
                     child: DropdownButton<String>(
                       isExpanded: true,
                       dropdownColor:
-                          Theme.of(context).brightness == Brightness.dark
-                              ? AppColors.secondaryColor
+                          ThemePreferance.instance.isDarkMode
+                              ? AppColors.secondaryColor.withValues(alpha: 0.6)
                               : Colors.white,
                       value: generator.passwordLength.toString(),
-                      icon: Icon(Icons.keyboard_arrow_down),
+                      icon: Icon(
+                        Icons.keyboard_arrow_down,
+                        color:
+                            ThemePreferance.instance.isDarkMode
+                                ? Colors.white
+                                : null,
+                      ),
                       items:
-                          [4, 6, 8, 10, 12, 14, 16, 20]
+                          [4, 6, 8, 10, 12, 14, 16, 20, 22]
                               .map(
                                 (value) => DropdownMenuItem<String>(
                                   value: value.toString(),
                                   child: CustomText(
                                     text: value.toString(),
-                                    color: AppColors.secondaryColor,
+                                    color:
+                                        ThemePreferance.instance.isDarkMode
+                                            ? Colors.white
+                                            : AppColors.secondaryColor,
                                   ),
                                 ),
                               )
@@ -116,11 +132,17 @@ class GeneratePasswordScreen extends ConsumerWidget {
                     child: DropdownButton<String>(
                       isExpanded: true,
                       dropdownColor:
-                          Theme.of(context).brightness == Brightness.dark
-                              ? AppColors.secondaryColor
+                          ThemePreferance.instance.isDarkMode
+                              ? AppColors.secondaryColor.withValues(alpha: 0.6)
                               : Colors.white,
                       value: generator.isSymble ? "Yes" : "No",
-                      icon: Icon(Icons.keyboard_arrow_down),
+                      icon: Icon(
+                        Icons.keyboard_arrow_down,
+                        color:
+                            ThemePreferance.instance.isDarkMode
+                                ? Colors.white
+                                : null,
+                      ),
                       items:
                           ["Yes", "No"]
                               .map(
@@ -128,7 +150,10 @@ class GeneratePasswordScreen extends ConsumerWidget {
                                   value: value,
                                   child: CustomText(
                                     text: value,
-                                    color: AppColors.secondaryColor,
+                                    color:
+                                        ThemePreferance.instance.isDarkMode
+                                            ? Colors.white
+                                            : AppColors.secondaryColor,
                                   ),
                                 ),
                               )
@@ -156,6 +181,10 @@ class GeneratePasswordScreen extends ConsumerWidget {
                       title: "RANDOMIZE",
                       isPrimary: false,
                       titleColor: AppColors.primaryColor,
+                      color:
+                          ThemePreferance.instance.isDarkMode
+                              ? Colors.white.withValues(alpha: 0.2)
+                              : null,
                     ),
                   ),
 

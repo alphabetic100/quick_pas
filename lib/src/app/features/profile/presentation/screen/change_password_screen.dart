@@ -8,6 +8,7 @@ import 'package:quick_pass/src/app/core/constants/assets/font_family.dart';
 import 'package:quick_pass/src/app/core/utils/colors/app_colors.dart';
 import 'package:quick_pass/src/app/core/utils/validators/text_field_validator.dart';
 import 'package:quick_pass/src/app/features/profile/controller/change_pass_controller.dart';
+import 'package:quick_pass/src/app/service/theme_preferance.dart';
 
 class ChangePasswordScreen extends ConsumerWidget {
   ChangePasswordScreen({super.key});
@@ -27,14 +28,20 @@ class ChangePasswordScreen extends ConsumerWidget {
               CustomText(
                 text: "CHANGE \nPASSWORD",
                 fontFamily: FontFamily.bebasNeue,
-                color: AppColors.secondaryColor,
+                color:
+                    ThemePreferance.instance.isDarkMode
+                        ? Colors.white
+                        : AppColors.secondaryColor,
                 fontSize: 55,
               ),
               SizedBox(height: 30),
               CustomText(
                 text: "Current Password",
                 fontFamily: FontFamily.bebasNeue,
-                color: AppColors.secondaryColor,
+                color:
+                    ThemePreferance.instance.isDarkMode
+                        ? Colors.white
+                        : AppColors.secondaryColor,
               ),
               CustomTextFormField(
                 controller: controllers.currentPassword,
@@ -44,7 +51,10 @@ class ChangePasswordScreen extends ConsumerWidget {
               CustomText(
                 text: "New Password",
                 fontFamily: FontFamily.bebasNeue,
-                color: AppColors.secondaryColor,
+                color:
+                    ThemePreferance.instance.isDarkMode
+                        ? Colors.white
+                        : AppColors.secondaryColor,
               ),
               CustomTextFormField(
                 controller: controllers.newPassword,
@@ -55,7 +65,10 @@ class ChangePasswordScreen extends ConsumerWidget {
               CustomText(
                 text: "Confirm Password",
                 fontFamily: FontFamily.bebasNeue,
-                color: AppColors.secondaryColor,
+                color:
+                    ThemePreferance.instance.isDarkMode
+                        ? Colors.white
+                        : AppColors.secondaryColor,
               ),
               CustomTextFormField(
                 controller: controllers.confirmPassword,

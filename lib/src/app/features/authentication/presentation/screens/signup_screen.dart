@@ -12,6 +12,7 @@ import 'package:quick_pass/src/app/core/utils/validators/text_field_validator.da
 import 'package:quick_pass/src/app/features/authentication/controller/register_controller.dart';
 import 'package:quick_pass/src/app/features/authentication/presentation/screens/login_screen.dart';
 import 'package:quick_pass/src/app/features/authentication/providers/register_user_provider.dart';
+import 'package:quick_pass/src/app/service/theme_preferance.dart';
 
 class SignupScreen extends ConsumerWidget {
   SignupScreen({super.key});
@@ -38,7 +39,10 @@ class SignupScreen extends ConsumerWidget {
                     fontFamily: FontFamily.bebasNeue,
 
                     fontSize: 55,
-                    color: AppColors.secondaryColor,
+                    color:
+                        ThemePreferance.instance.isDarkMode
+                            ? Colors.white
+                            : AppColors.secondaryColor,
                   ),
                   CustomText(
                     text: "Let’s get you setup with a new account!",

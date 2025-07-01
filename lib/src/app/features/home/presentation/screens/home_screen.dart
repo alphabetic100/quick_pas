@@ -7,6 +7,7 @@ import 'package:quick_pass/src/app/features/add_pass/presentation/screens/ad_pas
 import 'package:quick_pass/src/app/features/home/presentation/screens/home_screen_body.dart';
 import 'package:quick_pass/src/app/features/home/providers/nav_bar_provider.dart';
 import 'package:quick_pass/src/app/features/profile/presentation/screen/profile_screen.dart';
+import 'package:quick_pass/src/app/service/theme_preferance.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -34,7 +35,10 @@ class HomeScreen extends ConsumerWidget {
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         notchMargin: 10,
-        color: const Color(0xFFF1F1F1),
+        color:
+            ThemePreferance.instance.isDarkMode
+                ? Color(0xFFFFFFFF).withValues(alpha: 0.2)
+                : const Color(0xFFF1F1F1),
         elevation: 10,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 35),
@@ -83,7 +87,14 @@ class _BottomItem extends StatelessWidget {
           Image.asset(
             iconPath,
             height: 30,
-            color: selected ? AppColors.secondaryColor : null,
+            color:
+                selected
+                    ? ThemePreferance.instance.isDarkMode
+                        ? Colors.white
+                        : AppColors.secondaryColor
+                    : ThemePreferance.instance.isDarkMode
+                    ? AppColors.textSecondary
+                    : null,
           ),
           if (selected) ...[
             Container(
@@ -91,7 +102,10 @@ class _BottomItem extends StatelessWidget {
               height: 4,
               width: 30,
               decoration: BoxDecoration(
-                color: AppColors.secondaryColor,
+                color:
+                    ThemePreferance.instance.isDarkMode
+                        ? Colors.white
+                        : AppColors.secondaryColor,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),

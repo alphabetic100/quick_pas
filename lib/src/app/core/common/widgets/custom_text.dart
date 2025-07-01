@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quick_pass/src/app/core/utils/colors/app_colors.dart';
+import 'package:quick_pass/src/app/features/profile/providers/theme_provider.dart';
 
-class CustomText extends StatelessWidget {
+class CustomText extends ConsumerWidget {
   final String text;
   final double? fontSize;
   final Color? color;
@@ -30,7 +32,8 @@ class CustomText extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isDark = ref.watch(themeProvider);
     return Text(
       text,
       textAlign: textAlign ?? TextAlign.start,
@@ -40,7 +43,9 @@ class CustomText extends StatelessWidget {
         fontFamily: fontFamily ?? GoogleFonts.poppins().fontFamily,
         decorationColor: decorationColor ?? AppColors.textSecondary,
         fontSize: fontSize ?? 16,
-        color: color ?? AppColors.textSecondary,
+        color:
+            color ??
+            (isDark.isDarkmode ? Colors.white : AppColors.textSecondary),
         fontWeight: fontWeight ?? FontWeight.w600,
       ),
       overflow: textOverflow,

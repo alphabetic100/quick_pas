@@ -5,6 +5,7 @@ import 'package:quick_pass/src/app/core/utils/colors/app_colors.dart';
 import 'package:quick_pass/src/app/features/authentication/presentation/screens/login_screen.dart';
 import 'package:quick_pass/src/app/features/authentication/presentation/screens/signup_screen.dart';
 import 'package:quick_pass/src/app/features/onboardings/presentation/components/build_onbording.dart';
+import 'package:quick_pass/src/app/service/theme_preferance.dart';
 
 class OnbordingScreen extends StatelessWidget {
   const OnbordingScreen({super.key});
@@ -33,6 +34,10 @@ class OnbordingScreen extends StatelessWidget {
                   title: "REGISTER",
                   isPrimary: false,
                   titleColor: AppColors.primaryColor,
+                  color:
+                      ThemePreferance.instance.isDarkMode
+                          ? Colors.white.withValues(alpha: 0.2)
+                          : null,
                 ),
               ),
               SizedBox(width: 16),

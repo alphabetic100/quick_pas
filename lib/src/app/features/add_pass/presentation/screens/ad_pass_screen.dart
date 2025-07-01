@@ -9,6 +9,7 @@ import 'package:quick_pass/src/app/core/utils/colors/app_colors.dart';
 import 'package:quick_pass/src/app/core/utils/validators/text_field_validator.dart';
 import 'package:quick_pass/src/app/features/add_pass/controller/add_password_controller.dart';
 import 'package:quick_pass/src/app/features/add_pass/presentation/screens/generate_password_screen.dart';
+import 'package:quick_pass/src/app/service/theme_preferance.dart';
 
 class AddPassScreen extends ConsumerWidget {
   AddPassScreen({super.key});
@@ -22,7 +23,10 @@ class AddPassScreen extends ConsumerWidget {
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () => context.pop(),
-          child: Icon(Icons.arrow_back_ios),
+          child: Icon(
+            Icons.arrow_back_ios,
+            color: ThemePreferance.instance.isDarkMode ? Colors.white : null,
+          ),
         ),
       ),
       body: SafeArea(
@@ -38,13 +42,19 @@ class AddPassScreen extends ConsumerWidget {
                     text: "ADD NEW",
                     fontFamily: FontFamily.bebasNeue,
                     fontSize: 55,
-                    color: AppColors.secondaryColor,
+                    color:
+                        ThemePreferance.instance.isDarkMode
+                            ? Colors.white
+                            : AppColors.secondaryColor,
                   ),
                   SizedBox(height: 40),
                   CustomText(
                     text: "Name",
                     fontFamily: FontFamily.bebasNeue,
-                    color: AppColors.secondaryColor,
+                    color:
+                        ThemePreferance.instance.isDarkMode
+                            ? Colors.white
+                            : AppColors.secondaryColor,
                   ),
                   CustomTextFormField(
                     controller: controllers.name,
@@ -60,7 +70,10 @@ class AddPassScreen extends ConsumerWidget {
                   CustomText(
                     text: "url",
                     fontFamily: FontFamily.bebasNeue,
-                    color: AppColors.secondaryColor,
+                    color:
+                        ThemePreferance.instance.isDarkMode
+                            ? Colors.white
+                            : AppColors.secondaryColor,
                   ),
                   CustomTextFormField(
                     controller: controllers.url,
@@ -71,7 +84,10 @@ class AddPassScreen extends ConsumerWidget {
                   CustomText(
                     text: "EMAIL / USERNAME",
                     fontFamily: FontFamily.bebasNeue,
-                    color: AppColors.secondaryColor,
+                    color:
+                        ThemePreferance.instance.isDarkMode
+                            ? Colors.white
+                            : AppColors.secondaryColor,
                   ),
                   CustomTextFormField(
                     controller: controllers.email,
@@ -81,7 +97,10 @@ class AddPassScreen extends ConsumerWidget {
                   CustomText(
                     text: "PASSWORD",
                     fontFamily: FontFamily.bebasNeue,
-                    color: AppColors.secondaryColor,
+                    color:
+                        ThemePreferance.instance.isDarkMode
+                            ? Colors.white
+                            : AppColors.secondaryColor,
                   ),
                   CustomTextFormField(
                     controller: controllers.password,
@@ -105,6 +124,10 @@ class AddPassScreen extends ConsumerWidget {
                         title: "GENERATE NEW",
                         isPrimary: false,
                         titleColor: AppColors.primaryColor,
+                        color:
+                            ThemePreferance.instance.isDarkMode
+                                ? Colors.white.withValues(alpha: 0.2)
+                                : null,
                       ),
                     ),
                   ),

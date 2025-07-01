@@ -6,6 +6,7 @@ import 'package:quick_pass/src/app/core/constants/assets/font_family.dart';
 import 'package:quick_pass/src/app/core/constants/assets/icon_path.dart';
 import 'package:quick_pass/src/app/core/utils/colors/app_colors.dart';
 import 'package:quick_pass/src/app/core/utils/sizes/screen_spacer.dart';
+import 'package:quick_pass/src/app/service/theme_preferance.dart';
 
 class ForgetPasswordScreen extends StatelessWidget {
   ForgetPasswordScreen({super.key});
@@ -30,13 +31,19 @@ class ForgetPasswordScreen extends StatelessWidget {
                     fontFamily: FontFamily.bebasNeue,
 
                     fontSize: 55,
-                    color: AppColors.secondaryColor,
+                    color:
+                        ThemePreferance.instance.isDarkMode
+                            ? Colors.white
+                            : AppColors.secondaryColor,
                   ),
                   VerticalSpace(height: 40),
                   CustomText(
                     text: "EMAIL",
                     fontFamily: FontFamily.bebasNeue,
-                    color: AppColors.secondaryColor,
+                    color:
+                        ThemePreferance.instance.isDarkMode
+                            ? Colors.white
+                            : AppColors.secondaryColor,
                   ),
                   CustomTextFormField(
                     controller: TextEditingController(),

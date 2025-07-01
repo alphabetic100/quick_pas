@@ -3,6 +3,7 @@ import 'package:quick_pass/src/app/core/common/widgets/custom_text.dart';
 import 'package:quick_pass/src/app/core/constants/app_texts/app_text.dart';
 import 'package:quick_pass/src/app/core/constants/assets/icon_path.dart';
 import 'package:quick_pass/src/app/core/utils/colors/app_colors.dart';
+import 'package:quick_pass/src/app/service/theme_preferance.dart';
 
 class BuildOnbording extends StatelessWidget {
   const BuildOnbording({super.key, required this.currentPage});
@@ -98,7 +99,13 @@ class BuildOnbording extends StatelessWidget {
         children: [
           TextSpan(
             text: firstText,
-            style: TextStyle(color: AppColors.secondaryColor, fontSize: 55),
+            style: TextStyle(
+              color:
+                  ThemePreferance.instance.isDarkMode
+                      ? Colors.white
+                      : AppColors.secondaryColor,
+              fontSize: 55,
+            ),
           ),
           TextSpan(
             text: colorText,
@@ -106,7 +113,13 @@ class BuildOnbording extends StatelessWidget {
           ),
           TextSpan(
             text: lastText,
-            style: TextStyle(color: AppColors.secondaryColor, fontSize: 55),
+            style: TextStyle(
+              color:
+                  ThemePreferance.instance.isDarkMode
+                      ? Colors.white
+                      : AppColors.secondaryColor,
+              fontSize: 55,
+            ),
           ),
         ],
       ),
