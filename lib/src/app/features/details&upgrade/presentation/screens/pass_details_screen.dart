@@ -11,6 +11,7 @@ import 'package:quick_pass/src/app/core/utils/sizes/screen_spacer.dart';
 import 'package:quick_pass/src/app/features/details&upgrade/controller/update_pass_controller.dart';
 import 'package:quick_pass/src/app/features/details&upgrade/presentation/screens/edit_pass_details_screen.dart';
 import 'package:quick_pass/src/app/features/home/data/home_pass_data_mode.dart';
+import 'package:quick_pass/src/app/service/theme_preferance.dart';
 
 class PassDetailsScreen extends ConsumerWidget {
   const PassDetailsScreen({super.key, required this.passwordData});
@@ -23,7 +24,10 @@ class PassDetailsScreen extends ConsumerWidget {
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () => context.pop(),
-          child: Icon(Icons.arrow_back_ios),
+          child: Icon(
+            Icons.arrow_back_ios,
+            color: ThemePreferance.instance.isDarkMode ? Colors.white : null,
+          ),
         ),
       ),
 
@@ -45,7 +49,10 @@ class PassDetailsScreen extends ConsumerWidget {
                 text: passwordData.name,
                 fontFamily: FontFamily.bebasNeue,
                 fontSize: 40,
-                color: AppColors.secondaryColor,
+                color:
+                    ThemePreferance.instance.isDarkMode
+                        ? Colors.white
+                        : AppColors.secondaryColor,
               ),
               VerticalSpace(height: 30),
               _builtDetailCard(
@@ -100,6 +107,10 @@ class PassDetailsScreen extends ConsumerWidget {
                   title: "Delete",
                   isPrimary: false,
                   titleColor: AppColors.primaryColor,
+                  color:
+                      ThemePreferance.instance.isDarkMode
+                          ? Colors.white.withValues(alpha: 0.2)
+                          : null,
                 ),
               ),
 
@@ -132,7 +143,13 @@ class PassDetailsScreen extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, color: AppColors.textSecondary),
+        Icon(
+          icon,
+          color:
+              ThemePreferance.instance.isDarkMode
+                  ? Colors.white
+                  : AppColors.textSecondary,
+        ),
         SizedBox(height: isPassField ? 4 : 10),
         Row(
           children: [
@@ -143,7 +160,10 @@ class PassDetailsScreen extends ConsumerWidget {
                           ? value
                           : List.generate(value.length, (_) => "* ").join()
                       : value,
-              color: AppColors.textSecondary,
+              color:
+                  ThemePreferance.instance.isDarkMode
+                      ? Colors.white
+                      : AppColors.textSecondary,
               fontWeight: FontWeight.normal,
             ),
 

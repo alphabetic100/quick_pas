@@ -12,6 +12,7 @@ import 'package:quick_pass/src/app/core/constants/assets/icon_path.dart';
 import 'package:quick_pass/src/app/core/utils/colors/app_colors.dart';
 import 'package:quick_pass/src/app/core/utils/sizes/screen_spacer.dart';
 import 'package:quick_pass/src/app/features/profile/providers/update_profile_provider.dart';
+import 'package:quick_pass/src/app/service/theme_preferance.dart';
 
 class UpdateProfileScreen extends ConsumerWidget {
   UpdateProfileScreen(this.fullName, this.profileImage, {super.key}) {
@@ -31,7 +32,10 @@ class UpdateProfileScreen extends ConsumerWidget {
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () => context.pop(),
-          child: Icon(Icons.arrow_back_ios),
+          child: Icon(
+            Icons.arrow_back_ios,
+            color: ThemePreferance.instance.isDarkMode ? Colors.white : null,
+          ),
         ),
       ),
       body: SafeArea(
@@ -45,6 +49,10 @@ class UpdateProfileScreen extends ConsumerWidget {
                   text: "edit profile",
                   fontFamily: FontFamily.bebasNeue,
                   fontSize: 55,
+                  color:
+                      ThemePreferance.instance.isDarkMode
+                          ? Colors.white
+                          : AppColors.secondaryColor,
                 ),
                 SizedBox(
                   width: double.maxFinite,
@@ -115,6 +123,10 @@ class UpdateProfileScreen extends ConsumerWidget {
                   title: "Back",
                   isPrimary: false,
                   titleColor: AppColors.primaryColor,
+                  color:
+                      ThemePreferance.instance.isDarkMode
+                          ? Colors.white.withValues(alpha: 0.2)
+                          : null,
                 ),
               ),
               HorizontalSpace(width: 16),

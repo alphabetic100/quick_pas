@@ -5,6 +5,7 @@ import 'package:quick_pass/src/app/core/constants/assets/font_family.dart';
 import 'package:quick_pass/src/app/core/constants/assets/icon_path.dart';
 import 'package:quick_pass/src/app/core/utils/colors/app_colors.dart';
 import 'package:quick_pass/src/app/core/utils/sizes/screen_spacer.dart';
+import 'package:quick_pass/src/app/service/theme_preferance.dart';
 
 class PasswordCard extends StatelessWidget {
   const PasswordCard({
@@ -35,7 +36,10 @@ class PasswordCard extends StatelessWidget {
               padding: EdgeInsets.all(12),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                color: AppColors.secondaryColor,
+                color:
+                    ThemePreferance.instance.isDarkMode
+                        ? Colors.white.withValues(alpha: 0.2)
+                        : AppColors.secondaryColor,
               ),
               child:
                   getDefualtIconPath(title: title).isNotEmpty
@@ -53,7 +57,13 @@ class PasswordCard extends StatelessWidget {
                       ),
             ),
             HorizontalSpace(width: 16),
-            CustomText(text: title, color: AppColors.secondaryColor),
+            CustomText(
+              text: title,
+              color:
+                  ThemePreferance.instance.isDarkMode
+                      ? Colors.white
+                      : AppColors.secondaryColor,
+            ),
             Spacer(),
             InkWell(
               onTap: () {

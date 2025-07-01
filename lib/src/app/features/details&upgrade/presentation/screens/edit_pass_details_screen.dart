@@ -9,6 +9,7 @@ import 'package:quick_pass/src/app/core/utils/colors/app_colors.dart';
 import 'package:quick_pass/src/app/core/utils/validators/text_field_validator.dart';
 import 'package:quick_pass/src/app/features/add_pass/presentation/screens/generate_password_screen.dart';
 import 'package:quick_pass/src/app/features/details&upgrade/controller/update_pass_controller.dart';
+import 'package:quick_pass/src/app/service/theme_preferance.dart';
 
 class EditPassDetailsScreen extends ConsumerWidget {
   EditPassDetailsScreen({super.key});
@@ -21,7 +22,10 @@ class EditPassDetailsScreen extends ConsumerWidget {
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () => context.pop(),
-          child: Icon(Icons.arrow_back_ios),
+          child: Icon(
+            Icons.arrow_back_ios,
+            color: ThemePreferance.instance.isDarkMode ? Colors.white : null,
+          ),
         ),
       ),
       body: SafeArea(
@@ -104,6 +108,10 @@ class EditPassDetailsScreen extends ConsumerWidget {
                         title: "GENERATE NEW",
                         isPrimary: false,
                         titleColor: AppColors.primaryColor,
+                        color:
+                            ThemePreferance.instance.isDarkMode
+                                ? Colors.white.withValues(alpha: 0.2)
+                                : null,
                       ),
                     ),
                   ),

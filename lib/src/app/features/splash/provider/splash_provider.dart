@@ -11,9 +11,7 @@ import 'package:quick_pass/src/app/features/home/presentation/screens/home_scree
 import 'package:quick_pass/src/app/features/onboardings/presentation/view/onbording_screen.dart';
 import 'package:quick_pass/src/app/service/secure_sotrage_service.dart';
 
-
 enum SupportState { unknown, supported, unsupported }
-
 
 class SplashState {
   final List<BiometricType>? availableBiometrics;

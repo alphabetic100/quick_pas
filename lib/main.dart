@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quick_pass/src/app/core/constants/database/superbase_const.dart';
 import 'package:quick_pass/src/app/quick_pass_app.dart';
 import 'package:quick_pass/src/app/service/secure_sotrage_service.dart';
+import 'package:quick_pass/src/app/service/theme_preferance.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
@@ -12,5 +13,6 @@ void main() async {
     anonKey: SupabaseConst.supabaseAnonKey,
   );
   await SecureStorageService.instance.init();
+  await ThemePreferance.instance.init();
   runApp(ProviderScope(child: QuickPassApp()));
 }
