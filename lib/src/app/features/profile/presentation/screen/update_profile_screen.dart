@@ -45,6 +45,7 @@ class UpdateProfileScreen extends ConsumerWidget {
                   text: "edit profile",
                   fontFamily: FontFamily.bebasNeue,
                   fontSize: 55,
+                  color: AppColors.secondaryColor,
                 ),
                 SizedBox(
                   width: double.maxFinite,
