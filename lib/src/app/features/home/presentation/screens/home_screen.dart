@@ -7,7 +7,7 @@ import 'package:quick_pass/src/app/features/add_pass/presentation/screens/ad_pas
 import 'package:quick_pass/src/app/features/home/presentation/screens/home_screen_body.dart';
 import 'package:quick_pass/src/app/features/home/providers/nav_bar_provider.dart';
 import 'package:quick_pass/src/app/features/profile/presentation/screen/profile_screen.dart';
-import 'package:quick_pass/src/app/service/theme_preferance.dart';
+import 'package:quick_pass/src/app/features/profile/providers/theme_provider.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -16,6 +16,7 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentPage = ref.watch(NavBarProvider.currentPage);
+    final isDarkMode = ref.watch(themeProvider);
 
     return Scaffold(
       body: currentPage == 0 ? HomeScreenBody() : ProfileScreen(),
@@ -36,7 +37,7 @@ class HomeScreen extends ConsumerWidget {
         shape: const CircularNotchedRectangle(),
         notchMargin: 10,
         color:
-            ThemePreferance.instance.isDarkMode
+            isDarkMode.isDarkmode
                 ? Color(0xFFFFFFFF).withValues(alpha: 0.2)
                 : const Color(0xFFF1F1F1),
         elevation: 10,
@@ -48,11 +49,13 @@ class HomeScreen extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _BottomItem(
+                  isDarkMode: isDarkMode,
                   iconPath: IconPath.homeIcon,
                   selected: currentPage == 0,
                   onTap: () => NavBarProvider.changeIndex(ref: ref, index: 0),
                 ),
                 _BottomItem(
+                  isDarkMode: isDarkMode,
                   iconPath: IconPath.userIcon,
                   selected: currentPage == 1,
                   onTap: () => NavBarProvider.changeIndex(ref: ref, index: 1),
@@ -70,11 +73,13 @@ class _BottomItem extends StatelessWidget {
   final String iconPath;
   final bool selected;
   final VoidCallback onTap;
+  final ThemeState isDarkMode;
 
   const _BottomItem({
     required this.iconPath,
     required this.selected,
     required this.onTap,
+    required this.isDarkMode,
   });
 
   @override
@@ -89,10 +94,10 @@ class _BottomItem extends StatelessWidget {
             height: 30,
             color:
                 selected
-                    ? ThemePreferance.instance.isDarkMode
+                    ? isDarkMode.isDarkmode
                         ? Colors.white
                         : AppColors.secondaryColor
-                    : ThemePreferance.instance.isDarkMode
+                    : isDarkMode.isDarkmode
                     ? AppColors.textSecondary
                     : null,
           ),
@@ -103,7 +108,7 @@ class _BottomItem extends StatelessWidget {
               width: 30,
               decoration: BoxDecoration(
                 color:
-                    ThemePreferance.instance.isDarkMode
+                    isDarkMode.isDarkmode
                         ? Colors.white
                         : AppColors.secondaryColor,
                 borderRadius: BorderRadius.circular(2),
