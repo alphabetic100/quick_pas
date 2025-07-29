@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:quick_pass/src/app/core/common/widgets/custom_text.dart';
+import 'package:quick_pass/src/app/core/constants/assets/font_family.dart';
 
 import 'package:quick_pass/src/app/core/constants/assets/icon_path.dart';
 import 'package:quick_pass/src/app/core/utils/colors/app_colors.dart';
@@ -28,7 +30,7 @@ class SplashScreen extends ConsumerWidget {
             context.go(OnbordingScreen.routeName);
           }
         } else {
-          exit(0);
+          _showAuthenticationDialog(context);
         }
       }
     });
@@ -68,6 +70,33 @@ class SplashScreen extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void _showAuthenticationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+    //  barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: CustomText(text:  'Security Notice',  fontSize: 34,
+            fontFamily: FontFamily.bebasNeue,
+            color: AppColors.primaryColor,),
+          content: CustomText(text:  'To use the application, you need to enable security features like biometrics on your device.', 
+          fontSize: 14,
+          color: AppColors.secondaryColor,
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                exit(0);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

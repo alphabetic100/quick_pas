@@ -7,6 +7,7 @@ import 'package:quick_pass/src/app/features/add_pass/presentation/screens/ad_pas
 import 'package:quick_pass/src/app/features/home/presentation/screens/home_screen_body.dart';
 import 'package:quick_pass/src/app/features/home/providers/nav_bar_provider.dart';
 import 'package:quick_pass/src/app/features/profile/presentation/screen/profile_screen.dart';
+import 'package:quick_pass/src/app/features/profile/providers/theme_provider.dart';
 import 'package:quick_pass/src/app/service/theme_preferance.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -16,6 +17,8 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentPage = ref.watch(NavBarProvider.currentPage);
+
+    final  themeState = ref.watch(themeProvider);
 
     return Scaffold(
       body: currentPage == 0 ? HomeScreenBody() : ProfileScreen(),
@@ -36,7 +39,7 @@ class HomeScreen extends ConsumerWidget {
         shape: const CircularNotchedRectangle(),
         notchMargin: 10,
         color:
-            ThemePreferance.instance.isDarkMode
+           themeState.isDarkmode
                 ? Color(0xFFFFFFFF).withValues(alpha: 0.2)
                 : const Color(0xFFF1F1F1),
         elevation: 10,

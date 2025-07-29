@@ -21,7 +21,7 @@ class HomeScreenBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final homeState = ref.watch(allPasswordPrivider);
+    final homeState = ref.watch(allPasswordProvider);
     return CommonBgScreen(
       child: SingleChildScrollView(
         child: Column(
@@ -33,13 +33,12 @@ class HomeScreenBody extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: PasswordStoredCard(
-                      value: homeState.when(
-                        data:
-                            (data) =>
-                                data != null ? data.length.toString() : "0",
-                        error: (error, stackTrace) => "error",
-                        loading: () => "...",
-                      ),
+                      value:
+                          homeState.isLoading
+                              ? "..."
+                              : homeState.error != null
+                              ? "error"
+                              : homeState.passwords.length.toString(),
                       title: "Passwords \nStored",
                     ),
                   ),
@@ -63,75 +62,65 @@ class HomeScreenBody extends ConsumerWidget {
               hintText: "Search Websites...",
             ),
             VerticalSpace(height: 20),
-            homeState.when(
-              data:
-                  (data) =>
-                      data != null && data.isNotEmpty
-                          ? ListView.separated(
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              return PasswordCard(
-                                title: data[index].name,
-                                password: data[index].password,
-                                onTap:
-                                    () => Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder:
-                                            (_) => PassDetailsScreen(
-                                              passwordData: data[index],
-                                            ),
-                                      ),
-                                    ),
-                              );
-                            },
-                            separatorBuilder: (context, index) {
-                              return SizedBox(height: 20);
-                            },
-                            itemCount: data.length,
-                          )
-                          : data!.isEmpty
-                          ? Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              VerticalSpace(height: 10),
-                              Image.asset(ImagePath.emptySearch),
-                              VerticalSpace(height: 20),
-                              CustomText(
-                                text: "Empty List",
-                                fontWeight: FontWeight.bold,
-                                fontFamily: FontFamily.bebasNeue,
-                                fontSize: 30,
-                                color: AppColors.secondaryColor,
-                              ),
-                              CustomText(
-                                text: "No saved password found!",
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.textSecondary,
-                              ),
-                            ],
-                          )
-                          : Center(
-                            child: CustomText(
-                              text:
-                                  "Something went wrong, please check your internet and try again",
-                              textAlign: TextAlign.center,
+            homeState.isLoading
+                ? ListView.separated(
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return PasswordCardShimmer();
+                  },
+                  separatorBuilder: (context, index) {
+                    return SizedBox(height: 20);
+                  },
+                  itemCount: 4,
+                )
+                : homeState.error != null
+                ? Center(child: CustomText(text: homeState.error!))
+                : homeState.passwords.isNotEmpty
+                ? ListView.separated(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return PasswordCard(
+                      title: homeState.passwords[index].name,
+                      password: homeState.passwords[index].password,
+                      onTap:
+                          () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder:
+                                  (_) => PassDetailsScreen(
+                                    passwordData: homeState.passwords[index],
+                                  ),
                             ),
                           ),
-              error:
-                  (error, stackTrace) =>
-                      Center(child: CustomText(text: error.toString())),
-              loading:
-                  () => ListView.separated(
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return PasswordCardShimmer();
-                    },
-                    separatorBuilder: (context, index) {
-                      return SizedBox(height: 20);
-                    },
-                    itemCount: 4,
-                  ),
-            ),
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return SizedBox(height: 20);
+                  },
+                  itemCount: homeState.passwords.length,
+                )
+                : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    VerticalSpace(height: 10),
+                    Image.asset(ImagePath.emptySearch),
+                    VerticalSpace(height: 20),
+                    CustomText(
+                      text: "Empty List",
+                      fontWeight: FontWeight.bold,
+                      fontFamily: FontFamily.bebasNeue,
+                      fontSize: 30,
+                      color: AppColors.secondaryColor,
+                    ),
+                    CustomText(
+                      text: "No saved password found!",
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textSecondary,
+                    ),
+                  ],
+                ),
+
+            SizedBox(height: 60),
           ],
         ),
       ),
