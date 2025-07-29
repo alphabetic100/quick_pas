@@ -6,15 +6,17 @@ import 'package:quick_pass/src/app/core/constants/assets/font_family.dart';
 import 'package:quick_pass/src/app/core/constants/assets/icon_path.dart';
 import 'package:quick_pass/src/app/core/utils/colors/app_colors.dart';
 import 'package:quick_pass/src/app/core/utils/sizes/screen_spacer.dart';
-import 'package:quick_pass/src/app/features/authentication/presentation/screens/login_screen.dart';
 import 'package:quick_pass/src/app/features/profile/presentation/components/custom_profile_card.dart';
+import 'package:quick_pass/src/app/features/profile/presentation/components/logout_dialog.dart';
 import 'package:quick_pass/src/app/features/profile/presentation/components/user_profile_shimmer.dart';
 import 'package:quick_pass/src/app/features/profile/presentation/screen/autofill_setting_screen.dart';
 import 'package:quick_pass/src/app/features/profile/presentation/screen/change_password_screen.dart';
 import 'package:quick_pass/src/app/features/profile/presentation/screen/update_profile_screen.dart';
 import 'package:quick_pass/src/app/features/profile/providers/get_profile_provider.dart';
 import 'package:quick_pass/src/app/features/profile/providers/theme_provider.dart';
+
 import 'package:quick_pass/src/app/service/secure_sotrage_service.dart';
+
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -35,9 +37,11 @@ class ProfileScreen extends ConsumerWidget {
               fontFamily: FontFamily.bebasNeue,
               fontSize: 50,
               color:
+
                   isDark.isDarkmode
                       ? Colors.white
                       : AppColors.secondaryColor,
+
             ),
           ),
           SizedBox(
@@ -79,7 +83,12 @@ class ProfileScreen extends ConsumerWidget {
                           text: data.fullName,
                           fontFamily: FontFamily.bebasNeue,
                           fontSize: 32,
-                          color: isDark.isDarkmode? Colors.white: AppColors.secondaryColor,
+
+                          color:
+                              isDark.isDarkmode
+                                  ? Colors.white
+                                  : AppColors.secondaryColor,
+
                         ),
                         CustomText(text: data.email, fontSize: 14),
                       ],
@@ -160,12 +169,19 @@ class ProfileScreen extends ConsumerWidget {
             iconaPath: IconPath.logout,
             title: "Logout",
             onTap: () {
-              SecureStorageService.instance.clearToken();
-              context.go(LoginScreen.routeName);
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return LogoutDialog();
+                },
+              );
             },
           ),
           Spacer(),
-          CustomText(text: "v 1.0.0", fontSize: 12),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: CustomText(text: "v 1.0.0", fontSize: 12),
+          ),
         ],
       ),
     );

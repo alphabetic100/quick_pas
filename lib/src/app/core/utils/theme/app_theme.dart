@@ -7,6 +7,7 @@ class AppTheme {
 
   static ThemeData lightTheme = ThemeData(
     primaryColor: AppColors.primaryColor,
+    colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
     scaffoldBackgroundColor: AppColors.scaffoldBgLight,
     fontFamily: GoogleFonts.bebasNeue().fontFamily,
     appBarTheme: AppBarTheme(
@@ -17,6 +18,7 @@ class AppTheme {
 
   static ThemeData darkTheme = ThemeData(
     primaryColor: AppColors.scaffoldBgDark,
+    colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
     scaffoldBackgroundColor: AppColors.scaffoldBgDark,
     fontFamily: GoogleFonts.bebasNeue().fontFamily,
     appBarTheme: AppBarTheme(
