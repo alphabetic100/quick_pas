@@ -66,6 +66,7 @@ class CustomTextFormField extends StatelessWidget {
         onTap: onTap,
         controller: controller,
         readOnly: readonly,
+        onChanged: onChanged,
         obscureText: obscureText,
         maxLines: maxLines,
         keyboardType: keyboardType,

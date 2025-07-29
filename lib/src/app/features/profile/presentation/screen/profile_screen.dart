@@ -15,6 +15,9 @@ import 'package:quick_pass/src/app/features/profile/presentation/screen/update_p
 import 'package:quick_pass/src/app/features/profile/providers/get_profile_provider.dart';
 import 'package:quick_pass/src/app/features/profile/providers/theme_provider.dart';
 
+import 'package:quick_pass/src/app/service/secure_sotrage_service.dart';
+
+
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
   static const String routeName = "/profile";
@@ -34,7 +37,11 @@ class ProfileScreen extends ConsumerWidget {
               fontFamily: FontFamily.bebasNeue,
               fontSize: 50,
               color:
-                  isDark.isDarkmode ? Colors.white : AppColors.secondaryColor,
+
+                  isDark.isDarkmode
+                      ? Colors.white
+                      : AppColors.secondaryColor,
+
             ),
           ),
           SizedBox(
@@ -76,10 +83,12 @@ class ProfileScreen extends ConsumerWidget {
                           text: data.fullName,
                           fontFamily: FontFamily.bebasNeue,
                           fontSize: 32,
+
                           color:
                               isDark.isDarkmode
                                   ? Colors.white
                                   : AppColors.secondaryColor,
+
                         ),
                         CustomText(text: data.email, fontSize: 14),
                       ],

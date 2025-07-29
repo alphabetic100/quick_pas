@@ -8,10 +8,12 @@ import 'package:quick_pass/src/app/core/common/widgets/custom_snackbar.dart';
 import 'package:quick_pass/src/app/core/common/widgets/loading_widget.dart';
 import 'package:quick_pass/src/app/core/constants/database/superbase_const.dart';
 import 'package:quick_pass/src/app/features/add_pass/data/add_pass_model.dart';
+import 'package:quick_pass/src/app/features/home/providers/home_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AddPasswordController {
-  AddPasswordController();
+  AddPasswordController(this.ref);
+  final Ref ref;
   final name = TextEditingController();
   final url = TextEditingController();
   final email = TextEditingController();
@@ -42,6 +44,9 @@ class AddPasswordController {
         title: 'Successfully created',
         message: "Password has been stored successfully",
       );
+      // Refresh the home provider to show the new password
+      ref.read(allPasswordProvider.notifier).refreshPasswords();
+      
       // ignore: use_build_context_synchronously
       context.pop();
       clearControllers();
@@ -73,7 +78,7 @@ class AddPasswordController {
 }
 
 final addPassControlers = Provider.autoDispose((ref) {
-  final controller = AddPasswordController();
+  final controller = AddPasswordController(ref);
   ref.onDispose(controller.dispose);
   return controller;
 });

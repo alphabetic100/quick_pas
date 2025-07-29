@@ -153,18 +153,20 @@ class PassDetailsScreen extends ConsumerWidget {
         SizedBox(height: isPassField ? 4 : 10),
         Row(
           children: [
-            CustomText(
-              text:
-                  (isPassField)
-                      ? visibility
-                          ? value
-                          : List.generate(value.length, (_) => "* ").join()
-                      : value,
-              color:
-                  ThemePreferance.instance.isDarkMode
-                      ? Colors.white
-                      : AppColors.textSecondary,
-              fontWeight: FontWeight.normal,
+            Expanded(
+              child: CustomText(
+                text:
+                    (isPassField)
+                        ? visibility
+                            ? value
+                            : List.generate(value.length, (_) => "* ").join()
+                        : value,
+                color:
+                    ThemePreferance.instance.isDarkMode
+                        ? Colors.white
+                        : AppColors.textSecondary,
+                fontWeight: FontWeight.normal,
+              ),
             ),
 
             Spacer(),
