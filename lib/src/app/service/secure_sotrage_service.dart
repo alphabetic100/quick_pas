@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:quick_pass/src/app/service/sync_service.dart';
+import 'package:quick_pass/src/app/service/user_sync_service.dart';
 
 class SecureStorageService {
   // Private constructor
@@ -56,7 +58,10 @@ class SecureStorageService {
 
       _token = '';
       _userId = "";
-      log("[SecureStorageService] Token cleared");
+      
+      await SyncService.instance.clearLocalData();
+      await UserSyncService.instance.clearLocalUserData();
+      log("[SecureStorageService] Token and all local data cleared");
     } catch (error, stack) {
       log("Error clearing token", error: error, stackTrace: stack);
     }

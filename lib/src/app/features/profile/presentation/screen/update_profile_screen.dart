@@ -137,7 +137,7 @@ class UpdateProfileScreen extends ConsumerWidget {
                       context: context,
                       ref: ref,
                       name: name.text.trim(),
-                      priviousImage: profileImage,
+                      previousImage: profileImage,
                     );
                   },
                   title: "save",

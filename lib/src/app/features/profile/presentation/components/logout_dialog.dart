@@ -27,6 +27,7 @@ class LogoutDialog extends StatelessWidget {
               text: "Logout!",
               fontFamily: FontFamily.bebasNeue,
               fontSize: 30,
+              color: ThemePreferance.instance.isDarkMode? Colors.white: AppColors.secondaryColor,
             ),
 
             SizedBox(height: 10),

@@ -7,6 +7,7 @@ import 'package:quick_pass/src/app/core/common/widgets/custom_text.dart';
 import 'package:quick_pass/src/app/core/constants/assets/font_family.dart';
 import 'package:quick_pass/src/app/core/helpers/app_helper.dart';
 import 'package:quick_pass/src/app/core/utils/colors/app_colors.dart';
+import 'package:quick_pass/src/app/core/utils/password_analyzer.dart';
 import 'package:quick_pass/src/app/core/utils/sizes/screen_spacer.dart';
 import 'package:quick_pass/src/app/features/details&upgrade/controller/update_pass_controller.dart';
 import 'package:quick_pass/src/app/features/details&upgrade/presentation/screens/edit_pass_details_screen.dart';
@@ -39,10 +40,12 @@ class PassDetailsScreen extends ConsumerWidget {
             children: [
               VerticalSpace(height: 30),
               CustomText(
-                text: "Not Compromised",
+                text: PasswordAnalyzer.getPasswordStatusMessage(passwordData.password),
                 fontSize: 12,
                 fontWeight: FontWeight.normal,
-                color: AppColors.textSecondary,
+                color: PasswordAnalyzer.isPasswordCompromised(passwordData.password)
+                    ? Colors.red
+                    : Colors.green,
               ),
               VerticalSpace(height: 10),
               CustomText(
