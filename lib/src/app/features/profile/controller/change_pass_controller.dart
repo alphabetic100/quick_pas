@@ -44,8 +44,8 @@ class ChangePassController {
 
           // ignore: use_build_context_synchronously
           context.pop();
-          // ignore: use_build_context_synchronously
           CustomToast.showSuccess(
+            // ignore: use_build_context_synchronously
             context,
             title: "Success!",
             message: "Password Changed successfully",
@@ -57,8 +57,8 @@ class ChangePassController {
       } else {
         // ignore: use_build_context_synchronously
         LoadingWidget.hideLoading(context);
-        // ignore: use_build_context_synchronously
         CustomToast.showError(
+          // ignore: use_build_context_synchronously
           context,
           title: "Fatal!",
           message: "Current password is not currect!",
@@ -67,8 +67,8 @@ class ChangePassController {
     } catch (error, stackTrace) {
       // ignore: use_build_context_synchronously
       LoadingWidget.hideLoading(context);
-      // ignore: use_build_context_synchronously
       CustomToast.showError(
+        // ignore: use_build_context_synchronously
         context,
         title: "Fatal!",
         message: "Current password is not currect!",

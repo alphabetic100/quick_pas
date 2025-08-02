@@ -102,7 +102,10 @@ class PassDetailsScreen extends ConsumerWidget {
                   onTap: () {
                     ref
                         .watch(updateControllers)
-                        .deletePass(context: context, password: passwordData);
+                        .deletePass(
+                            context: context,
+                            password: passwordData,
+                            ref: ref);
                   },
                   title: "Delete",
                   isPrimary: false,

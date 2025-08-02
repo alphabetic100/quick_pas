@@ -7,6 +7,7 @@ import 'package:quick_pass/src/app/core/common/widgets/loading_widget.dart';
 import 'package:quick_pass/src/app/core/constants/database/superbase_const.dart';
 import 'package:quick_pass/src/app/features/details&upgrade/data/update_model.dart';
 import 'package:quick_pass/src/app/features/home/data/home_pass_data_mode.dart';
+import 'package:quick_pass/src/app/features/home/providers/home_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class UpdatePassController {
@@ -23,7 +24,7 @@ class UpdatePassController {
     nameTEController.text = password.name;
     urlTEController.text = password.url;
     emailTEController.text = password.email;
-    passwordTEController.text = password.email;
+    passwordTEController.text = password.password;
     createdAtValue = password.createdAt;
   }
 
@@ -35,7 +36,10 @@ class UpdatePassController {
     createdAtValue = "";
   }
 
-  Future<void> updatePassword({required BuildContext context}) async {
+  Future<void> updatePassword({
+    required BuildContext context,
+    required WidgetRef ref,
+  }) async {
     try {
       if (passwordID.isEmpty) {
         return;
@@ -55,6 +59,8 @@ class UpdatePassController {
           )
           .eq('pass_id', passwordID)
           .then((onValue) {
+            // Refresh the password provider to sync with home and search screens
+            ref.read(allPasswordProvider.notifier).refreshPasswords();
             context.pop();
           });
     } catch (error) {
@@ -70,6 +76,7 @@ class UpdatePassController {
   Future<void> deletePass({
     required BuildContext context,
     required PasswordModel password,
+    required WidgetRef ref,
   }) async {
     try {
       LoadingWidget.showLoading(context);
@@ -78,6 +85,8 @@ class UpdatePassController {
           .delete()
           .eq("pass_id", password.passId)
           .then((onValue) {
+            // Refresh the password provider to sync with home and search screens
+            ref.read(allPasswordProvider.notifier).refreshPasswords();
             context.pop();
           });
     } catch (error) {
