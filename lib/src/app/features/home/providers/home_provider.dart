@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quick_pass/src/app/core/constants/database/superbase_const.dart';
+import 'package:quick_pass/src/app/core/utils/password_analyzer.dart';
 import 'package:quick_pass/src/app/features/home/data/home_pass_data_mode.dart';
 import 'package:quick_pass/src/app/service/secure_sotrage_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -31,6 +32,14 @@ class PasswordState {
       isLoading: isLoading ?? this.isLoading,
       error: error ?? this.error,
     );
+  }
+
+  /// Gets the count of compromised (weak) passwords
+  int get compromisedPasswordCount {
+    if (passwords.isEmpty) return 0;
+    return passwords
+        .where((password) => PasswordAnalyzer.isPasswordCompromised(password.password))
+        .length;
   }
 }
 

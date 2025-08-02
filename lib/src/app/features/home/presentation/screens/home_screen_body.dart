@@ -13,7 +13,9 @@ import 'package:quick_pass/src/app/features/details&upgrade/presentation/screens
 import 'package:quick_pass/src/app/features/home/presentation/components/password_card.dart';
 import 'package:quick_pass/src/app/features/home/presentation/components/password_card_shimmer.dart';
 import 'package:quick_pass/src/app/features/home/presentation/components/password_stored_card.dart';
+import 'package:quick_pass/src/app/features/home/presentation/screens/compromised_passwords_screen.dart';
 import 'package:quick_pass/src/app/features/home/presentation/screens/search_screen.dart';
+import 'package:quick_pass/src/app/features/home/presentation/screens/stored_passwords_screen.dart';
 import 'package:quick_pass/src/app/features/home/providers/home_provider.dart';
 
 class HomeScreenBody extends ConsumerWidget {
@@ -32,21 +34,43 @@ class HomeScreenBody extends ConsumerWidget {
               child: Row(
                 children: [
                   Expanded(
-                    child: PasswordStoredCard(
-                      value:
-                          homeState.isLoading
-                              ? "..."
-                              : homeState.error != null
-                              ? "error"
-                              : homeState.passwords.length.toString(),
-                      title: "Passwords \nStored",
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => StoredPasswordsScreen(),
+                          ),
+                        );
+                      },
+                      child: PasswordStoredCard(
+                        value:
+                            homeState.isLoading
+                                ? "..."
+                                : homeState.error != null
+                                ? "error"
+                                : homeState.passwords.length.toString(),
+                        title: "Passwords \nStored",
+                      ),
                     ),
                   ),
                   HorizontalSpace(width: 16),
                   Expanded(
-                    child: PasswordStoredCard(
-                      value: "0",
-                      title: "Passwords \nCompromised",
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => CompromisedPasswordsScreen(),
+                          ),
+                        );
+                      },
+                      child: PasswordStoredCard(
+                        value: homeState.isLoading
+                            ? "..."
+                            : homeState.error != null
+                            ? "error"
+                            : homeState.compromisedPasswordCount.toString(),
+                        title: "Passwords \nCompromised",
+                      ),
                     ),
                   ),
                 ],
