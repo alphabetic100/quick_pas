@@ -129,7 +129,8 @@ class EditPassDetailsScreen extends ConsumerWidget {
           child: CustomButton(
             onTap: () {
               if (formState.currentState!.validate()) {
-                ref.watch(updateControllers).updatePassword(context: context);
+                ref.watch(updateControllers).updatePassword(
+                    context: context, ref: ref);
               }
             },
             title: "UPDATE PASSWORD",

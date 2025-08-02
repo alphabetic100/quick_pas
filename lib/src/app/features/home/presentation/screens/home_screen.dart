@@ -9,8 +9,6 @@ import 'package:quick_pass/src/app/features/home/providers/nav_bar_provider.dart
 import 'package:quick_pass/src/app/features/profile/presentation/screen/profile_screen.dart';
 import 'package:quick_pass/src/app/features/profile/providers/theme_provider.dart';
 
-import 'package:quick_pass/src/app/service/theme_preferance.dart';
-
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -56,13 +54,13 @@ class HomeScreen extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _BottomItem(
-                  isDarkMode: isDarkMode,
+                  isDarkMode: themeState,
                   iconPath: IconPath.homeIcon,
                   selected: currentPage == 0,
                   onTap: () => NavBarProvider.changeIndex(ref: ref, index: 0),
                 ),
                 _BottomItem(
-                  isDarkMode: isDarkMode,
+                  isDarkMode: themeState,
                   iconPath: IconPath.userIcon,
                   selected: currentPage == 1,
                   onTap: () => NavBarProvider.changeIndex(ref: ref, index: 1),
