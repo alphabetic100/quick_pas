@@ -38,9 +38,10 @@ class PasswordModel {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'created_at': createdAt,
-      'updated_at': updatedAt,
-      'user_id': userId,
+      'passId': passId,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
+      'userId': userId,
       'name': name,
       'url': url,
       'password': password,

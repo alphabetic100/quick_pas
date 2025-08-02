@@ -8,6 +8,7 @@ import 'package:quick_pass/src/app/features/home/presentation/screens/home_scree
 import 'package:quick_pass/src/app/features/home/providers/nav_bar_provider.dart';
 import 'package:quick_pass/src/app/features/profile/presentation/screen/profile_screen.dart';
 import 'package:quick_pass/src/app/features/profile/providers/theme_provider.dart';
+import 'package:quick_pass/src/app/core/common/widgets/offline_indicator.dart';
 
 
 class HomeScreen extends ConsumerWidget {
@@ -22,7 +23,14 @@ class HomeScreen extends ConsumerWidget {
     final  themeState = ref.watch(themeProvider);
 
     return Scaffold(
-      body: currentPage == 0 ? HomeScreenBody() : ProfileScreen(),
+      body: Column(
+        children: [
+          const OfflineIndicator(),
+          Expanded(
+            child: currentPage == 0 ? HomeScreenBody() : ProfileScreen(),
+          ),
+        ],
+      ),
 
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton.large(

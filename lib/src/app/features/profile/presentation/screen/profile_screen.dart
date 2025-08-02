@@ -12,7 +12,8 @@ import 'package:quick_pass/src/app/features/profile/presentation/components/user
 import 'package:quick_pass/src/app/features/profile/presentation/screen/autofill_setting_screen.dart';
 import 'package:quick_pass/src/app/features/profile/presentation/screen/change_password_screen.dart';
 import 'package:quick_pass/src/app/features/profile/presentation/screen/update_profile_screen.dart';
-import 'package:quick_pass/src/app/features/profile/providers/get_profile_provider.dart';
+import 'package:quick_pass/src/app/features/profile/providers/offline_profile_provider.dart';
+import 'package:quick_pass/src/app/service/connectivity_service.dart';
 import 'package:quick_pass/src/app/features/profile/providers/theme_provider.dart';
 
 
@@ -21,8 +22,9 @@ class ProfileScreen extends ConsumerWidget {
   static const String routeName = "/profile";
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final profileData = ref.watch(getProfile);
+    final profileState = ref.watch(offlineProfileProvider);
     final isDark = ref.watch(themeProvider);
+    final isConnected = ref.watch(isConnectedProvider);
     return SafeArea(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,93 +46,30 @@ class ProfileScreen extends ConsumerWidget {
           ),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.25,
-            child: profileData.when(
-              data: (data) {
-                if (data != null) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: MediaQuery.of(context).size.height * 0.1,
-                          width: MediaQuery.of(context).size.height * 0.1,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: AppColors.primaryColor,
-                              width: 4,
-                            ),
-                            borderRadius: BorderRadius.circular(25),
-                            image: DecorationImage(
-                              image:
-                                  data.profileImage.isNotEmpty
-                                      ? NetworkImage(data.profileImage)
-                                      : AssetImage(IconPath.userIcon),
-                              scale: data.profileImage.isNotEmpty ? 2 : 2,
-                              fit:
-                                  data.profileImage.isNotEmpty
-                                      ? BoxFit.cover
-                                      : null,
-                              onError:
-                                  (exception, stackTrace) =>
-                                      AssetImage(IconPath.userIcon),
-                            ),
-                          ),
-                        ),
-                        VerticalSpace(height: 10),
-                        CustomText(
-                          text: data.fullName,
-                          fontFamily: FontFamily.bebasNeue,
-                          fontSize: 32,
-
-                          color:
-                              isDark.isDarkmode
-                                  ? Colors.white
-                                  : AppColors.secondaryColor,
-
-                        ),
-                        CustomText(text: data.email, fontSize: 14),
-                      ],
-                    ),
-                  );
-                } else {
-                  return CustomText(
-                    text:
-                        "Something went wrong, please check your internet and try again",
-                    textAlign: TextAlign.center,
-                  );
-                }
-              },
-              error:
-                  (error, stackTrace) => Center(
-                    child: CustomText(
-                      text:
-                          "Something went wrong, please check your internet and try again",
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-              loading: () => UserProfileShimmer(),
-            ),
+            child: _buildProfileContent(profileState, isDark, isConnected, context, ref),
           ),
           VerticalSpace(height: 20),
           CustomProfileCard(
             iconaPath: IconPath.userIcon,
             title: "Update Profile",
             onTap: () {
-              context.push(
-                UpdateProfileScreen.routeName,
-                extra: {
-                  "fullName": profileData.value!.fullName,
-                  "image": profileData.value!.profileImage,
-                },
-              );
+              if (profileState.userData != null) {
+                context.push(
+                  UpdateProfileScreen.routeName,
+                  extra: {
+                    "fullName": profileState.userData!.fullName,
+                    "image": profileState.userData!.profileImage,
+                  },
+                );
+              }
             },
           ),
           CustomProfileCard(
             iconaPath: IconPath.lockIcon,
             title: "Change Master Password",
-            onTap: () {
+            onTap: isConnected ? () {
               context.push(ChangePasswordScreen.routeName);
-            },
+            } : () {},
           ),
           CustomProfileCard(
             iconaPath: IconPath.editIcon,
@@ -183,5 +122,92 @@ class ProfileScreen extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  Widget _buildProfileContent(ProfileState profileState, ThemeState isDark, bool isConnected, BuildContext context, WidgetRef ref) {
+    if (profileState.isLoading) {
+      return UserProfileShimmer();
+    }
+
+    if (profileState.userData != null) {
+      final data = profileState.userData!;
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height * 0.1,
+              width: MediaQuery.of(context).size.height * 0.1,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: AppColors.primaryColor,
+                  width: 4,
+                ),
+                borderRadius: BorderRadius.circular(25),
+                image: DecorationImage(
+                  image: data.profileImage.isNotEmpty
+                      ? NetworkImage(data.profileImage)
+                      : AssetImage(IconPath.userIcon),
+                  scale: data.profileImage.isNotEmpty ? 2 : 2,
+                  fit: data.profileImage.isNotEmpty ? BoxFit.cover : null,
+                  onError: (exception, stackTrace) => AssetImage(IconPath.userIcon),
+                ),
+              ),
+            ),
+            VerticalSpace(height: 10),
+            CustomText(
+              text: data.fullName,
+              fontFamily: FontFamily.bebasNeue,
+              fontSize: 32,
+              color: isDark.isDarkmode ? Colors.white : AppColors.secondaryColor,
+            ),
+            CustomText(text: data.email, fontSize: 14),
+            if (!isConnected) ...
+            [
+              VerticalSpace(height: 5),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors.orange,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  'Offline Data',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+      );
+    } else {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CustomText(
+              text: isConnected 
+                  ? "Unable to load profile data"
+                  : "No offline profile data available",
+              textAlign: TextAlign.center,
+            ),
+            if (isConnected) ...
+            [
+              VerticalSpace(height: 8),
+              ElevatedButton(
+                onPressed: () {
+                  ref.read(offlineProfileProvider.notifier).refreshProfile();
+                },
+                child: Text('Retry'),
+              ),
+            ],
+          ],
+        ),
+      );
+    }
   }
 }

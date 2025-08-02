@@ -88,7 +88,7 @@ class ChangePasswordScreen extends ConsumerWidget {
                   if (_formState.currentState!.validate()) {
                     ref
                         .read(changePassController)
-                        .changePassword(context: context);
+                        .changePassword(context: context, ref: ref);
                   }
                 },
                 title: "CHANGE PASSWORD",

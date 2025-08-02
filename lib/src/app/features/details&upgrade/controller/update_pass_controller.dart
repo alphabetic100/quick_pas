@@ -3,12 +3,12 @@ import 'dart:developer';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:quick_pass/src/app/core/common/widgets/custom_snackbar.dart';
 import 'package:quick_pass/src/app/core/common/widgets/loading_widget.dart';
-import 'package:quick_pass/src/app/core/constants/database/superbase_const.dart';
-import 'package:quick_pass/src/app/features/details&upgrade/data/update_model.dart';
 import 'package:quick_pass/src/app/features/home/data/home_pass_data_mode.dart';
 import 'package:quick_pass/src/app/features/home/providers/home_provider.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:quick_pass/src/app/service/connectivity_service.dart';
+import 'package:quick_pass/src/app/service/sync_service.dart';
 
 class UpdatePassController {
   final nameTEController = TextEditingController();
@@ -16,11 +16,12 @@ class UpdatePassController {
   final emailTEController = TextEditingController();
   final passwordTEController = TextEditingController();
   String createdAtValue = "";
-  String passwordID = "";
-  final SupabaseClient supabase = Supabase.instance.client;
+  int passwordID = 0;
+  final SyncService _syncService = SyncService.instance;
+  final ConnectivityService _connectivity = ConnectivityService.instance;
 
   void assignValue({required PasswordModel password}) {
-    passwordID = password.passId;
+    passwordID = password.id;
     nameTEController.text = password.name;
     urlTEController.text = password.url;
     emailTEController.text = password.email;
@@ -33,7 +34,7 @@ class UpdatePassController {
     urlTEController.dispose();
     emailTEController.dispose();
     passwordTEController.dispose();
-    createdAtValue = "";
+    passwordID = 0;
   }
 
   Future<void> updatePassword({
@@ -41,35 +42,59 @@ class UpdatePassController {
     required WidgetRef ref,
   }) async {
     try {
-      if (passwordID.isEmpty) {
+      if (passwordID == 0) {
         return;
       }
+      
+      if (!_connectivity.isConnected) {
+        CustomToast.showError(
+          context,
+          title: 'Offline Mode',
+          message: "You need internet connection to update passwords",
+        );
+        return;
+      }
+      
       LoadingWidget.showLoading(context);
-      await supabase
-          .from(SupabaseConst.passwordCollection)
-          .update(
-            UpdateModel.toJson(
-              passId: passwordID,
-              name: nameTEController.text.trim(),
-              url: urlTEController.text.trim(),
-              email: emailTEController.text.trim(),
-              password: passwordTEController.text.trim(),
-              createdAt: createdAtValue,
-            ),
-          )
-          .eq('pass_id', passwordID)
-          .then((onValue) {
-            // Refresh the password provider to sync with home and search screens
-            ref.read(allPasswordProvider.notifier).refreshPasswords();
-            context.pop();
-          });
+      final success = await _syncService.updatePassword(
+        id: passwordID,
+        name: nameTEController.text.trim(),
+        url: urlTEController.text.trim(),
+        email: emailTEController.text.trim(),
+        password: passwordTEController.text.trim(),
+      );
+      
+      // ignore: use_build_context_synchronously
+      LoadingWidget.hideLoading(context);
+      
+      if (success) {
+        CustomToast.showSuccess(
+          // ignore: use_build_context_synchronously
+          context,
+          title: 'Success',
+          message: "Password updated successfully",
+        );
+        ref.read(allPasswordProvider.notifier).refreshPasswords();
+        // ignore: use_build_context_synchronously
+        context.pop();
+      } else {
+        CustomToast.showError(
+          // ignore: use_build_context_synchronously
+          context,
+          title: 'Failed!',
+          message: "Failed to update password. Please try again.",
+        );
+      }
     } catch (error) {
       // ignore: use_build_context_synchronously
       LoadingWidget.hideLoading(context);
       log(error.toString());
-    } finally {
-      // ignore: use_build_context_synchronously
-      LoadingWidget.hideLoading(context);
+      CustomToast.showError(
+        // ignore: use_build_context_synchronously
+        context,
+        title: 'Error',
+        message: "Something went wrong. Please try again.",
+      );
     }
   }
 
@@ -79,23 +104,49 @@ class UpdatePassController {
     required WidgetRef ref,
   }) async {
     try {
+      if (!_connectivity.isConnected) {
+        CustomToast.showError(
+          context,
+          title: 'Offline Mode',
+          message: "You need internet connection to delete passwords",
+        );
+        return;
+      }
+      
       LoadingWidget.showLoading(context);
-      await supabase
-          .from(SupabaseConst.passwordCollection)
-          .delete()
-          .eq("pass_id", password.passId)
-          .then((onValue) {
-            // Refresh the password provider to sync with home and search screens
-            ref.read(allPasswordProvider.notifier).refreshPasswords();
-            context.pop();
-          });
+      final success = await _syncService.deletePassword(password.id);
+      
+      // ignore: use_build_context_synchronously
+      LoadingWidget.hideLoading(context);
+      
+      if (success) {
+        CustomToast.showSuccess(
+          // ignore: use_build_context_synchronously
+          context,
+          title: 'Success',
+          message: "Password deleted successfully",
+        );
+        ref.read(allPasswordProvider.notifier).refreshPasswords();
+        // ignore: use_build_context_synchronously
+        context.pop();
+      } else {
+        CustomToast.showError(
+          // ignore: use_build_context_synchronously
+          context,
+          title: 'Failed!',
+          message: "Failed to delete password. Please try again.",
+        );
+      }
     } catch (error) {
       // ignore: use_build_context_synchronously
       LoadingWidget.hideLoading(context);
       log(error.toString());
-    } finally {
-      // ignore: use_build_context_synchronously
-      LoadingWidget.hideLoading(context);
+      CustomToast.showError(
+        // ignore: use_build_context_synchronously
+        context,
+        title: 'Error',
+        message: "Something went wrong. Please try again.",
+      );
     }
   }
 }

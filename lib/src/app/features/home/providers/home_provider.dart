@@ -2,11 +2,10 @@ import 'dart:developer';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:quick_pass/src/app/core/constants/database/superbase_const.dart';
 import 'package:quick_pass/src/app/core/utils/password_analyzer.dart';
 import 'package:quick_pass/src/app/features/home/data/home_pass_data_mode.dart';
-import 'package:quick_pass/src/app/service/secure_sotrage_service.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:quick_pass/src/app/service/connectivity_service.dart';
+import 'package:quick_pass/src/app/service/sync_service.dart';
 
 // State class for password management
 class PasswordState {
@@ -14,23 +13,27 @@ class PasswordState {
   final bool isLoading;
   final String? error;
   final TextEditingController search;
+  final bool isOffline;
 
   PasswordState({
     required this.passwords,
     required this.isLoading,
     this.error,
     TextEditingController? search,
+    this.isOffline = false,
   }): search = search?? TextEditingController();
 
   PasswordState copyWith({
     List<PasswordModel>? passwords,
     bool? isLoading,
     String? error,
+    bool? isOffline,
   }) {
     return PasswordState(
       passwords: passwords ?? this.passwords,
       isLoading: isLoading ?? this.isLoading,
       error: error ?? this.error,
+      isOffline: isOffline ?? this.isOffline,
     );
   }
 
@@ -46,34 +49,54 @@ class PasswordState {
 class PasswordNotifier extends StateNotifier<PasswordState> {
   PasswordNotifier() : super( PasswordState(passwords: [], isLoading: true)) {
     loadPasswords();
+    _listenToConnectivity();
   }
 
-  final supabase = Supabase.instance.client;
+  final SyncService _syncService = SyncService.instance;
+  final ConnectivityService _connectivity = ConnectivityService.instance;
+
+  void _listenToConnectivity() {
+    _connectivity.connectionStream.listen((isConnected) {
+      if (isConnected && !state.isLoading) {
+        log('Connection restored, syncing passwords');
+        syncPasswords();
+      }
+      state = state.copyWith(isOffline: !isConnected);
+    });
+  }
 
   Future<void> loadPasswords() async {
     state = state.copyWith(isLoading: true, error: null);
     try {
-      final userId = SecureStorageService.instance.userId;
-      final response = await supabase
-          .from(SupabaseConst.passwordCollection)
-          .select()
-          .eq("user_id", userId);
-
-      final passwords = PasswordModel.fromJsonList(response);
-      log('Fetched ${passwords.length} passwords');
-      state = state.copyWith(passwords: passwords, isLoading: false);
+      final passwords = await _syncService.getPasswords();
+      log('Loaded ${passwords.length} passwords');
+      state = state.copyWith(
+        passwords: passwords,
+        isLoading: false,
+        isOffline: !_connectivity.isConnected,
+      );
     } catch (error) {
-      log('Error fetching passwords: $error');
+      log('Error loading passwords: $error');
       state = state.copyWith(
         passwords: [],
         isLoading: false,
         error: error.toString(),
+        isOffline: !_connectivity.isConnected,
       );
     }
   }
 
   Future<void> refreshPasswords() async {
     await loadPasswords();
+  }
+
+  Future<void> syncPasswords() async {
+    try {
+      await _syncService.syncPasswords();
+      await loadPasswords();
+    } catch (error) {
+      log('Error syncing passwords: $error');
+    }
   }
 
 }
