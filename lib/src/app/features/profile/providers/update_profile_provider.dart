@@ -42,9 +42,7 @@ class UpdateProfileProvider {
   }) async {
     try {
       if (!_connectivity.isConnected) {
-        CustomToast.showError(
-          context,
-          title: 'Offline Mode',
+        CustomSnackbar.showError(
           message: "You need internet connection to update your profile",
         );
         return;
@@ -63,20 +61,14 @@ class UpdateProfileProvider {
       LoadingWidget.hideLoading(context);
 
       if (success) {
-        CustomToast.showSuccess(
-          // ignore: use_build_context_synchronously
-          context,
-          title: 'Success',
+        CustomSnackbar.showSuccess(
           message: "Profile updated successfully",
         );
         ref.read(offlineProfileProvider.notifier).refreshProfile();
         // ignore: use_build_context_synchronously
         context.pop();
       } else {
-        CustomToast.showError(
-          // ignore: use_build_context_synchronously
-          context,
-          title: 'Failed!',
+        CustomSnackbar.showError(
           message: "Failed to update profile. Please try again.",
         );
       }
@@ -84,10 +76,7 @@ class UpdateProfileProvider {
       // ignore: use_build_context_synchronously
       LoadingWidget.hideLoading(context);
       log("Update Error: $error");
-      CustomToast.showError(
-        // ignore: use_build_context_synchronously
-        context,
-        title: 'Error',
+      CustomSnackbar.showError(
         message: "Something went wrong. Please try again.",
       );
     } finally {

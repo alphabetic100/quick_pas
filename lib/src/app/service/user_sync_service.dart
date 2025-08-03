@@ -5,12 +5,14 @@ import 'package:quick_pass/src/app/features/profile/data/user_data.dart';
 import 'package:quick_pass/src/app/service/connectivity_service.dart';
 import 'package:quick_pass/src/app/service/local_user_service.dart';
 import 'package:quick_pass/src/app/service/secure_sotrage_service.dart';
+import 'package:quick_pass/src/app/service/image_cache_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class UserSyncService {
   static final UserSyncService instance = UserSyncService._internal();
   final LocalUserService _localUserService = LocalUserService.instance;
   final ConnectivityService _connectivity = ConnectivityService.instance;
+  final ImageCacheService _imageCacheService = ImageCacheService.instance;
   final supabase = Supabase.instance.client;
 
   factory UserSyncService() {
@@ -38,6 +40,7 @@ class UserSyncService {
         if (response != null) {
           final userData = UserData.fromJson(response);
           await _saveUserLocally(userData);
+          await _cacheProfileImage(userData);
           log('Successfully synced user profile from remote');
           return userData;
         } else {
@@ -56,10 +59,13 @@ class UserSyncService {
 
   Future<void> _saveUserLocally(UserData userData) async {
     try {
+      log('Attempting to save user profile locally for user ${userData.userId}');
+      log('User data: ${userData.toJson()}');
       await _localUserService.insertUser(userData);
-      log('Saved user profile to local storage for user ${userData.userId}');
+      log('Successfully saved user profile to local storage for user ${userData.userId}');
     } catch (error) {
       log('Error saving user profile locally: $error');
+      rethrow;
     }
   }
 
@@ -115,8 +121,12 @@ class UserSyncService {
             })
             .eq("user_id", userId);
 
-        await syncUserProfile();
-        log('User profile updated on remote server and synced locally');
+        // Re-sync the updated profile from server
+        final updatedProfile = await getUserProfile();
+        if (updatedProfile != null) {
+          await _saveUserLocally(updatedProfile);
+        }
+        log('User profile updated on remote server and re-synced locally');
         return true;
       } else {
         log('Offline mode: Cannot update profile without internet connection');
@@ -125,6 +135,17 @@ class UserSyncService {
     } catch (error) {
       log('Error updating user profile: $error');
       return false;
+    }
+  }
+
+  Future<void> _cacheProfileImage(UserData userData) async {
+    try {
+      if (userData.profileImage.isNotEmpty) {
+        await _imageCacheService.cacheProfileImage(userData.userId, userData.profileImage);
+        log('Profile image cached locally for user ${userData.userId}');
+      }
+    } catch (error) {
+      log('Error caching profile image locally: $error');
     }
   }
 
@@ -167,15 +188,36 @@ class UserSyncService {
     }
   }
 
+  // Get profile image source (cached local path or remote URL)
+  Future<String?> getProfileImageSource(String userId, String? remoteImageUrl) async {
+    try {
+      // First check if we have a cached version
+      final cachedPath = await _imageCacheService.getCachedProfileImagePath(userId);
+      if (cachedPath != null) {
+        return cachedPath;
+      }
+      
+      // If no cached version and we're online, return remote URL
+      if (_connectivity.isConnected && remoteImageUrl != null && remoteImageUrl.isNotEmpty) {
+        return remoteImageUrl;
+      }
+    } catch (error) {
+      log('Error getting profile image source: $error');
+    }
+    return null;
+  }
+
   Future<void> clearLocalUserData() async {
     try {
       final userId = SecureStorageService.instance.userId;
       if (userId.isNotEmpty) {
         await _localUserService.deleteUser(userId);
-        log('Local user data cleared for user $userId');
+        await _imageCacheService.deleteCachedProfileImage(userId);
+        log('Local user data and cached images cleared for user $userId');
       } else {
         await _localUserService.clearAllUsers();
-        log('All local user data cleared');
+        await _imageCacheService.clearAllCachedImages();
+        log('All local user data and cached images cleared');
       }
     } catch (error) {
       log('Error clearing local user data: $error');

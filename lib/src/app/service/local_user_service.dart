@@ -24,8 +24,9 @@ class LocalUserService {
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: _createDB,
+      onUpgrade: _upgradeDB,
     );
   }
 
@@ -33,32 +34,51 @@ class LocalUserService {
     await db.execute('''
       CREATE TABLE users(
         id INTEGER PRIMARY KEY,
-        createdAt TEXT,
+        created_at TEXT,
         fullName TEXT,
         email TEXT,
         password TEXT,
         profileImage TEXT,
         updatedAt TEXT,
-        userId TEXT UNIQUE
+        user_id TEXT UNIQUE
       )
     ''');
     log("Local Users Database created");
   }
 
+  Future<void> _upgradeDB(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      // Drop and recreate the table with correct column names
+      await db.execute('DROP TABLE IF EXISTS users');
+      await _createDB(db, newVersion);
+      log("Local Users Database upgraded to version $newVersion");
+    }
+  }
+
   Future<void> insertUser(UserData user) async {
-    final db = await instance.database;
-    await db.insert(
-      'users',
-      user.toJson(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    try {
+      final db = await instance.database;
+      final userData = user.toJson();
+      log('Inserting user data: $userData');
+      
+      await db.insert(
+        'users',
+        userData,
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+      
+      log('Successfully inserted user ${user.userId} into local database');
+    } catch (error) {
+      log('Error inserting user into local database: $error');
+      rethrow;
+    }
   }
 
   Future<UserData?> getUserByUserId(String userId) async {
     final db = await instance.database;
     final List<Map<String, dynamic>> maps = await db.query(
       'users',
-      where: 'userId = ?',
+      where: 'user_id = ?',
       whereArgs: [userId],
     );
 
@@ -73,7 +93,7 @@ class LocalUserService {
     await db.update(
       'users',
       user.toJson(),
-      where: 'userId = ?',
+      where: 'user_id = ?',
       whereArgs: [user.userId],
     );
   }
@@ -82,7 +102,7 @@ class LocalUserService {
     final db = await instance.database;
     await db.delete(
       'users',
-      where: 'userId = ?',
+      where: 'user_id = ?',
       whereArgs: [userId],
     );
   }

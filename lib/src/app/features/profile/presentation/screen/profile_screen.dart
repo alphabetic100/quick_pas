@@ -162,25 +162,25 @@ class ProfileScreen extends ConsumerWidget {
               color: isDark.isDarkmode ? Colors.white : AppColors.secondaryColor,
             ),
             CustomText(text: data.email, fontSize: 14),
-            if (!isConnected) ...
-            [
-              VerticalSpace(height: 5),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.orange,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  'Offline Data',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ],
+            // if (!isConnected) ...
+            // [
+            //   VerticalSpace(height: 5),
+            //   Container(
+            //     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            //     decoration: BoxDecoration(
+            //       color: Colors.orange,
+            //       borderRadius: BorderRadius.circular(12),
+            //     ),
+            //     child: Text(
+            //       'Offline Data',
+            //       style: TextStyle(
+            //         color: Colors.white,
+            //         fontSize: 12,
+            //         fontWeight: FontWeight.w500,
+            //       ),
+            //     ),
+            //   ),
+            // ],
           ],
         ),
       );

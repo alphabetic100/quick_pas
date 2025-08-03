@@ -23,9 +23,7 @@ class ChangePassController {
   }) async {
     try {
       if (!_connectivity.isConnected) {
-        CustomToast.showError(
-          context,
-          title: 'Offline Mode',
+        CustomSnackbar.showError(
           message: "You need internet connection to change your password",
         );
         return;
@@ -42,30 +40,21 @@ class ChangePassController {
       LoadingWidget.hideLoading(context);
 
       if (success) {
-        CustomToast.showSuccess(
-          // ignore: use_build_context_synchronously
-          context,
-          title: "Success!",
+        CustomSnackbar.showSuccess(
           message: "Password changed successfully",
         );
         ref.read(offlineProfileProvider.notifier).refreshProfile();
         // ignore: use_build_context_synchronously
         context.pop();
       } else {
-        CustomToast.showError(
-          // ignore: use_build_context_synchronously
-          context,
-          title: "Failed!",
+        CustomSnackbar.showError(
           message: "Failed to change password. Please check your credentials.",
         );
       }
     } catch (error, stackTrace) {
       // ignore: use_build_context_synchronously
       LoadingWidget.hideLoading(context);
-      CustomToast.showError(
-        // ignore: use_build_context_synchronously
-        context,
-        title: "Error!",
+      CustomSnackbar.showError(
         message: "Something went wrong. Please try again.",
       );
       log(error.toString() + stackTrace.toString());
