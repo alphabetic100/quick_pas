@@ -6,6 +6,7 @@ import 'package:quick_pass/src/app/service/connectivity_service.dart';
 import 'package:quick_pass/src/app/service/local_database_service.dart';
 import 'package:quick_pass/src/app/service/local_user_service.dart';
 import 'package:quick_pass/src/app/service/secure_sotrage_service.dart';
+import 'package:quick_pass/src/app/service/encryption_service.dart';
 import 'package:quick_pass/src/app/service/theme_preferance.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -16,10 +17,9 @@ void main() async {
     url: SupabaseConst.supabaseUrl,
     anonKey: SupabaseConst.supabaseAnonKey,
   );
-  
   await SecureStorageService.instance.init();
   await ThemePreferance.instance.init();
-  
+  await EncryptionService.instance.initialize();
   await LocalDatabaseService.instance.database;
   await LocalUserService.instance.database;
   ConnectivityService.instance;

@@ -43,6 +43,10 @@ dependencies:
   http: ^1.2.2
   # Toast notifications
   fluttertoast: ^8.2.8
+  # Encryption for password data
+  encrypt: ^5.0.3
+  # Random number generation for encryption keys
+  crypto: ^3.0.5
 
 dev_dependencies:
   flutter_test:

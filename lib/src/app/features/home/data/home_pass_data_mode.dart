@@ -1,3 +1,5 @@
+import '../../../service/encryption_service.dart';
+
 class PasswordModel {
   final int id;
   final String passId;
@@ -8,6 +10,9 @@ class PasswordModel {
   final String url;
   final String password;
   final String email;
+  // Add encrypted fields for storage
+  final String? encryptedPassword;
+  final String? encryptedEmail;
 
   PasswordModel({
     required this.id,
@@ -19,6 +24,8 @@ class PasswordModel {
     required this.url,
     required this.password,
     required this.email,
+    this.encryptedPassword,
+    this.encryptedEmail,
   });
 
   factory PasswordModel.fromJson(Map<String, dynamic> json) {
@@ -32,6 +39,42 @@ class PasswordModel {
       url: json['url'] ?? '',
       password: json['password'] ?? '',
       email: json['email'] ?? '',
+      encryptedPassword: json['encrypted_password'],
+      encryptedEmail: json['encrypted_email'],
+    );
+  }
+
+  /// Create PasswordModel with encrypted data
+  static Future<PasswordModel> createWithEncryption({
+    required int id,
+    required String passId,
+    required String createdAt,
+    required String updatedAt,
+    required String userId,
+    required String name,
+    required String url,
+    required String password,
+    required String email,
+  }) async {
+    final encryptionService = EncryptionService.instance;
+    
+    final encryptedData = await encryptionService.encryptSensitiveData(
+      password: password,
+      email: email.isNotEmpty ? email : null,
+    );
+    
+    return PasswordModel(
+      id: id,
+      passId: passId,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+      userId: userId,
+      name: name,
+      url: url,
+      password: password,
+      email: email,
+      encryptedPassword: encryptedData['password']!,
+      encryptedEmail: encryptedData['email'],
     );
   }
 
@@ -44,12 +87,71 @@ class PasswordModel {
       'userId': userId,
       'name': name,
       'url': url,
-      'password': password,
-      'email': email,
+      'password': encryptedPassword ?? password, // Use encrypted if available
+      'email': encryptedEmail ?? email, // Use encrypted if available
+      'encrypted_password': encryptedPassword,
+      'encrypted_email': encryptedEmail,
     };
+  }
+
+  /// Get decrypted password data
+  Future<Map<String, String>> getDecryptedData() async {
+    if (encryptedPassword == null) {
+      // Fallback for non-encrypted data
+      return {
+        'password': password,
+        'email': email,
+      };
+    }
+    
+    final encryptionService = EncryptionService.instance;
+    return await encryptionService.decryptSensitiveData(
+      encryptedPassword: encryptedPassword!,
+      encryptedEmail: encryptedEmail,
+    );
+  }
+
+  /// Create a copy with decrypted data for display
+  Future<PasswordModel> withDecryptedData() async {
+    if (encryptedPassword == null) {
+      return this; // Already decrypted or plain text
+    }
+    
+    final decryptedData = await getDecryptedData();
+    
+    return PasswordModel(
+      id: id,
+      passId: passId,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+      userId: userId,
+      name: name,
+      url: url,
+      password: decryptedData['password']!,
+      email: decryptedData['email'] ?? '',
+      encryptedPassword: encryptedPassword,
+      encryptedEmail: encryptedEmail,
+    );
   }
 
   static List<PasswordModel> fromJsonList(List<dynamic> jsonList) {
     return jsonList.map((json) => PasswordModel.fromJson(json)).toList();
+  }
+
+  /// Static method to decrypt a list of password models
+  static Future<List<PasswordModel>> decryptList(List<PasswordModel> encryptedList) async {
+    List<PasswordModel> decryptedList = [];
+    
+    for (PasswordModel model in encryptedList) {
+      try {
+        final decryptedModel = await model.withDecryptedData();
+        decryptedList.add(decryptedModel);
+      } catch (e) {
+        // If decryption fails, add the original (might be plain text)
+        decryptedList.add(model);
+      }
+    }
+    
+    return decryptedList;
   }
 }

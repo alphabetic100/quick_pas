@@ -41,10 +41,12 @@ class LocalDatabaseService {
         url TEXT,
         password TEXT,
         email TEXT,
+        encrypted_password TEXT,
+        encrypted_email TEXT,
         UNIQUE(id, userId)
       )
     ''');
-    log("Local Database created");
+    log("Local Database created with encryption support");
   }
 
   Future<void> insertPassword(PasswordModel password) async {
@@ -70,6 +72,8 @@ class LocalDatabaseService {
         'url': maps[i]['url'],
         'password': maps[i]['password'],
         'email': maps[i]['email'],
+        'encrypted_password': maps[i]['encrypted_password'],
+        'encrypted_email': maps[i]['encrypted_email'],
       });
     });
   }
@@ -92,6 +96,8 @@ class LocalDatabaseService {
         'url': maps[i]['url'],
         'password': maps[i]['password'],
         'email': maps[i]['email'],
+        'encrypted_password': maps[i]['encrypted_password'],
+        'encrypted_email': maps[i]['encrypted_email'],
       });
     });
   }
