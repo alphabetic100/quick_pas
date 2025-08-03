@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quick_pass/src/app/core/common/widgets/custom_button.dart';
 import 'package:quick_pass/src/app/core/common/widgets/custom_text.dart';
+import 'package:quick_pass/src/app/core/common/dialogs/password_dialogs.dart';
 import 'package:quick_pass/src/app/core/constants/assets/font_family.dart';
 import 'package:quick_pass/src/app/core/helpers/app_helper.dart';
 import 'package:quick_pass/src/app/core/utils/colors/app_colors.dart';
@@ -103,12 +104,11 @@ class PassDetailsScreen extends ConsumerWidget {
               Expanded(
                 child: CustomButton(
                   onTap: () {
-                    ref
-                        .watch(updateControllers)
-                        .deletePass(
-                            context: context,
-                            password: passwordData,
-                            ref: ref);
+                    PasswordDialogs.showDeleteConfirmation(
+                      context: context,
+                      ref: ref,
+                      passwordData: passwordData,
+                    );
                   },
                   title: "Delete",
                   isPrimary: false,

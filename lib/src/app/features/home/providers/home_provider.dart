@@ -68,10 +68,15 @@ class PasswordNotifier extends StateNotifier<PasswordState> {
   Future<void> loadPasswords() async {
     state = state.copyWith(isLoading: true, error: null);
     try {
-      final passwords = await _syncService.getPasswords();
-      log('Loaded ${passwords.length} passwords');
+      final encryptedPasswords = await _syncService.getPasswords();
+      log('Loaded ${encryptedPasswords.length} encrypted passwords');
+      
+      // Decrypt passwords for display
+      final decryptedPasswords = await PasswordModel.decryptList(encryptedPasswords);
+      log('Decrypted ${decryptedPasswords.length} passwords for display');
+      
       state = state.copyWith(
-        passwords: passwords,
+        passwords: decryptedPasswords,
         isLoading: false,
         isOffline: !_connectivity.isConnected,
       );

@@ -4,6 +4,7 @@ import 'package:quick_pass/src/app/features/home/data/home_pass_data_mode.dart';
 import 'package:quick_pass/src/app/service/connectivity_service.dart';
 import 'package:quick_pass/src/app/service/local_database_service.dart';
 import 'package:quick_pass/src/app/service/secure_sotrage_service.dart';
+import 'package:quick_pass/src/app/service/encryption_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SyncService {
@@ -81,17 +82,27 @@ class SyncService {
   }) async {
     try {
       if (_connectivity.isConnected && SecureStorageService.instance.hasToken) {
-        log('Adding password to remote server');
+        log('Adding encrypted password to remote server');
+        
+        // Encrypt sensitive data before storing
+        final encryptionService = EncryptionService.instance;
+        final encryptedData = await encryptionService.encryptSensitiveData(
+          password: password,
+          email: email.isNotEmpty ? email : null,
+        );
+        
         await supabase.from(SupabaseConst.passwordCollection).insert({
           'user_id': SecureStorageService.instance.userId,
           'name': name,
           'url': url,
-          'email': email,
-          'password': password,
+          'email': encryptedData['email'] ?? '',
+          'password': encryptedData['password']!,
+          'encrypted_email': encryptedData['email'],
+          'encrypted_password': encryptedData['password']!,
         });
         
         await syncPasswords();
-        log('Password added to remote server and synced locally');
+        log('Encrypted password added to remote server and synced locally');
         return true;
       } else {
         log('Offline mode: Cannot add password without internet connection');
@@ -112,20 +123,30 @@ class SyncService {
   }) async {
     try {
       if (_connectivity.isConnected && SecureStorageService.instance.hasToken) {
-        log('Updating password on remote server');
+        log('Updating encrypted password on remote server');
+        
+        // Encrypt sensitive data before updating
+        final encryptionService = EncryptionService.instance;
+        final encryptedData = await encryptionService.encryptSensitiveData(
+          password: password,
+          email: email.isNotEmpty ? email : null,
+        );
+        
         await supabase
             .from(SupabaseConst.passwordCollection)
             .update({
               'name': name,
               'url': url,
-              'email': email,
-              'password': password,
+              'email': encryptedData['email'] ?? '',
+              'password': encryptedData['password']!,
+              'encrypted_email': encryptedData['email'],
+              'encrypted_password': encryptedData['password']!,
               'updated_at': DateTime.now().toIso8601String(),
             })
             .eq('id', id);
         
         await syncPasswords();
-        log('Password updated on remote server and synced locally');
+        log('Encrypted password updated on remote server and synced locally');
         return true;
       } else {
         log('Offline mode: Cannot update password without internet connection');
