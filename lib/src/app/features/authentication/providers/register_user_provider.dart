@@ -9,6 +9,7 @@ import 'package:quick_pass/src/app/features/authentication/data/data_source/remo
 import 'package:quick_pass/src/app/features/authentication/data/repo_impl/auth_repo_impl.dart';
 import 'package:quick_pass/src/app/features/home/presentation/screens/home_screen.dart';
 import 'package:quick_pass/src/app/service/secure_sotrage_service.dart';
+import 'package:quick_pass/src/app/service/user_sync_service.dart';
 
 final registerProvider = StateNotifierProvider<RegisterNotifier, RegisterState>(
   (ref) => RegisterNotifier(),
@@ -50,22 +51,20 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
       // ignore: use_build_context_synchronously
       LoadingWidget.hideLoading(context);
       if (user.accessToken.isNotEmpty) {
-        CustomToast.showSuccess(
-          // ignore: use_build_context_synchronously
-          context,
-          title: "Success!",
+        CustomSnackbar.showSuccess(
           message: "Account registration successfull",
         );
         await SecureStorageService.instance.saveToken(token: user.accessToken);
         await SecureStorageService.instance.saveUserId(userId: user.userId);
+        
+        // Sync user profile to local storage after successful registration
+        await UserSyncService.instance.syncUserProfile();
+        
         // ignore: use_build_context_synchronously
         context.go(HomeScreen.routeName);
         //Ask for the Fingerprint access
       } else {
-        CustomToast.showError(
-          // ignore: use_build_context_synchronously
-          context,
-          title: "Opps!",
+        CustomSnackbar.showError(
           message: "Something went wrong, please try again",
         );
       }

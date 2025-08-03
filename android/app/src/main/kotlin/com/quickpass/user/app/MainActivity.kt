@@ -1,4 +1,4 @@
-package com.example.quick_pass
+package com.quickpass.user.app
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 

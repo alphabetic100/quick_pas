@@ -1,73 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-class CustomToast {
-  static void showSuccess(
-    BuildContext context, {
-    required String title,
+class CustomSnackbar {
+  static void showSuccess({
     required String message,
-    Duration duration = const Duration(seconds: 3),
+    Toast length = Toast.LENGTH_SHORT
   }) {
     _showToast(
-      context,
-      title: title,
       message: message,
       backgroundColor: Color(0xFF10B981),
-      duration: duration,
+      length: length,
     );
   }
 
-  static void showError(
-    BuildContext context, {
-    required String title,
+  static void showError({
     required String message,
-    Duration duration = const Duration(seconds: 3),
+    Toast length = Toast.LENGTH_SHORT
   }) {
     _showToast(
-      context,
-      title: title,
       message: message,
-      backgroundColor: Colors.black,
-      duration: duration,
+      backgroundColor: Colors.red,
+      length: length,
     );
   }
 
-  static void _showToast(
-    BuildContext context, {
-    required String title,
+  static void _showToast({
     required String message,
     required Color backgroundColor,
-    required Duration duration,
+    required Toast length,
   }) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                message,
-                style: const TextStyle(color: Colors.white, fontSize: 14),
-              ),
-            ],
-          ),
-        ),
-        backgroundColor: backgroundColor,
-        behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.symmetric(vertical: 16),
-        //  / shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        duration: duration,
-      ),
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: length,
+      gravity: ToastGravity.TOP,
+      backgroundColor: backgroundColor,
+      textColor: Colors.white,
+      fontSize: 16.0,
     );
   }
 }

@@ -13,28 +13,30 @@ class OfflineIndicator extends ConsumerWidget {
       data: (isConnected) {
         if (isConnected) return const SizedBox.shrink();
         
-        return Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          color: Colors.orange,
-          child: const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.wifi_off,
-                color: Colors.white,
-                size: 16,
-              ),
-              SizedBox(width: 8),
-              Text(
-                'You are offline. Some features may be limited.',
-                style: TextStyle(
+        return SafeArea(
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            color: Colors.orange,
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.wifi_off,
                   color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
+                  size: 16,
                 ),
-              ),
-            ],
+                SizedBox(width: 8),
+                Text(
+                  'You are offline. Some features may be limited.',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },

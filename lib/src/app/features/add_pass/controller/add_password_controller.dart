@@ -23,9 +23,7 @@ class AddPasswordController {
   Future<bool> addPaasord({required BuildContext context}) async {
     try {
       if (!_connectivity.isConnected) {
-        CustomToast.showError(
-          context,
-          title: 'Offline Mode',
+        CustomSnackbar.showError(
           message: "You need internet connection to add new passwords",
         );
         return false;
@@ -43,10 +41,7 @@ class AddPasswordController {
       LoadingWidget.hideLoading(context);
 
       if (success) {
-        CustomToast.showSuccess(
-          // ignore: use_build_context_synchronously
-          context,
-          title: 'Successfully created',
+        CustomSnackbar.showSuccess(
           message: "Password has been stored successfully",
         );
         // Refresh the home provider to show the new password
@@ -57,10 +52,7 @@ class AddPasswordController {
         clearControllers();
         return true;
       } else {
-        CustomToast.showError(
-          // ignore: use_build_context_synchronously
-          context,
-          title: 'Failed!',
+        CustomSnackbar.showError(
           message: "Failed to add password. Please try again.",
         );
       }
@@ -68,10 +60,7 @@ class AddPasswordController {
       // ignore: use_build_context_synchronously
       LoadingWidget.hideLoading(context);
       log(error.toString());
-      CustomToast.showError(
-        // ignore: use_build_context_synchronously
-        context,
-        title: 'Failed!',
+      CustomSnackbar.showError(
         message: "Something went wrong, please try again.",
       );
     }
