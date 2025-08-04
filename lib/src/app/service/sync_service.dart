@@ -99,6 +99,8 @@ class SyncService {
           'password': encryptedData['password']!,
           'encrypted_email': encryptedData['email'],
           'encrypted_password': encryptedData['password']!,
+          'created_at': DateTime.now().toIso8601String(),
+          'updated_at': DateTime.now().toIso8601String(),
         });
         
         await syncPasswords();
