@@ -100,6 +100,18 @@ class EncryptionService {
         throw Exception("Encryption service not properly initialized");
       }
 
+      // Validate input
+      if (encryptedPassword.isEmpty) {
+        throw Exception("Encrypted password is empty");
+      }
+
+      // Check if the data is valid base64
+      try {
+        base64.decode(encryptedPassword);
+      } catch (e) {
+        throw Exception("Invalid base64 encrypted data: $e");
+      }
+
       // Decrypt the password
       final encrypted = Encrypted.fromBase64(encryptedPassword);
       final decrypted = _encrypter!.decrypt(encrypted, iv: _iv!);
@@ -109,6 +121,12 @@ class EncryptionService {
     } catch (error, stackTrace) {
       log("[EncryptionService] Error decrypting password", 
           error: error, stackTrace: stackTrace);
+      // Check if this is a padding error (corrupted data)
+      if (error.toString().contains('Invalid or corrupted pad block') || 
+          error.toString().contains('ArgumentError')) {
+        log("[EncryptionService] Detected corrupted encrypted data, returning empty string");
+        return ''; // Return empty string for corrupted data
+      }
       throw Exception("Failed to decrypt password: $error");
     }
   }
@@ -221,4 +239,48 @@ class EncryptionService {
 
   /// Get encryption strength information
   String get encryptionInfo => "AES-256-CBC with secure random IV";
+
+  /// Check if encrypted data is valid (can be decrypted)
+  Future<bool> isDataValid(String encryptedData) async {
+    try {
+      if (encryptedData.isEmpty) return false;
+      
+      if (!_isInitialized) {
+        await initialize();
+      }
+
+      if (_encrypter == null || _iv == null) {
+        return false;
+      }
+
+      // Check if the data is valid base64
+      try {
+        base64.decode(encryptedData);
+      } catch (e) {
+        return false;
+      }
+
+      // Try to decrypt without throwing exceptions
+      final encrypted = Encrypted.fromBase64(encryptedData);
+      _encrypter!.decrypt(encrypted, iv: _iv!);
+      return true;
+    } catch (e) {
+      // Any decryption error means the data is invalid
+      return false;
+    }
+  }
+
+  /// Attempt to recover from corrupted encryption keys
+  Future<void> resetEncryptionKeys() async {
+    try {
+      log("[EncryptionService] Resetting encryption keys due to corruption");
+      await clearEncryptionKeys();
+      await initialize();
+      log("[EncryptionService] Encryption keys reset successfully");
+    } catch (error, stackTrace) {
+      log("[EncryptionService] Error resetting encryption keys", 
+          error: error, stackTrace: stackTrace);
+      throw Exception("Failed to reset encryption keys: $error");
+    }
+  }
 }

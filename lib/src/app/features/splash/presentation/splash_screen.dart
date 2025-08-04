@@ -20,33 +20,52 @@ class SplashScreen extends ConsumerStatefulWidget {
   ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends ConsumerState<SplashScreen> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
-  late Animation<double> _rotationAnimation;
+class _SplashScreenState extends ConsumerState<SplashScreen> with TickerProviderStateMixin {
+  late AnimationController _pulseController;
+  late AnimationController _fadeController;
+  late Animation<double> _pulseAnimation;
+  late Animation<double> _fadeAnimation;
+  late Animation<double> _slideAnimation;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      duration: Duration(seconds: 2),
+    
+    // Pulse animation for both icon and text
+    _pulseController = AnimationController(
+      duration: Duration(milliseconds: 1500),
       vsync: this,
     )..repeat(reverse: true);
     
-    _scaleAnimation = Tween(begin: 0.8, end: 1.2).animate(CurvedAnimation(
-      parent: _controller,
+    _pulseAnimation = Tween(begin: 0.9, end: 1.1).animate(CurvedAnimation(
+      parent: _pulseController,
       curve: Curves.easeInOut,
     ));
     
-    _rotationAnimation = Tween(begin: 0.0, end: 0.1).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
+    // Fade and slide animation for text
+    _fadeController = AnimationController(
+      duration: Duration(milliseconds: 2000),
+      vsync: this,
+    );
+    
+    _fadeAnimation = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+      parent: _fadeController,
+      curve: Interval(0.3, 1.0, curve: Curves.easeOut),
     ));
+    
+    _slideAnimation = Tween(begin: 30.0, end: 0.0).animate(CurvedAnimation(
+      parent: _fadeController,
+      curve: Interval(0.3, 1.0, curve: Curves.easeOut),
+    ));
+    
+    // Start the fade animation
+    _fadeController.forward();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _pulseController.dispose();
+    _fadeController.dispose();
     super.dispose();
   }
 
@@ -75,42 +94,48 @@ class _SplashScreenState extends ConsumerState<SplashScreen> with SingleTickerPr
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             AnimatedBuilder(
-              animation: _controller,
+              animation: _pulseController,
               builder: (context, child) {
                 return Transform.scale(
-                  scale: _scaleAnimation.value,
-                  child: Transform.rotate(
-                    angle: _rotationAnimation.value,
-                    child: Image.asset(IconPath.passIcon, height: 40),
-                  ),
+                  scale: _pulseAnimation.value,
+                  child: Image.asset(IconPath.passIcon, height: 40),
                 );
               },
             ),
             const SizedBox(height: 10),
-            Text.rich(
-              TextSpan(
-                children: [
-                  TextSpan(
-                    text: "QUICK",
-                    style: TextStyle(
-                      color: AppColors.primaryColor,
-                      fontSize: 40,
+            AnimatedBuilder(
+              animation: _fadeController,
+              builder: (context, child) {
+                return Opacity(
+                  opacity: _fadeAnimation.value,
+                  child: Transform.translate(
+                    offset: Offset(0, _slideAnimation.value),
+                    child: Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "QUICK",
+                            style: TextStyle(
+                              color: AppColors.primaryColor,
+                              fontSize: 40,
+                            ),
+                          ),
+                          TextSpan(
+                            text: " PASS",
+                            style: TextStyle(
+                              color:
+                                  ThemePreferance.instance.isDarkMode
+                                      ? Colors.white
+                                      : AppColors.secondaryColor,
+                              fontSize: 40,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  TextSpan(
-                    text: " PASS",
-                    style: TextStyle(
-                      color:
-                          ThemePreferance.instance.isDarkMode
-                              ? Colors.white
-                              : AppColors.secondaryColor,
-                      fontSize: 40,
-                    ),
-                  ),
-
-                  if (splashState.isLoading) ...[],
-                ],
-              ),
+                );
+              },
             ),
           ],
         ),

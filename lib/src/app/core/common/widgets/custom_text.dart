@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:quick_pass/src/app/core/constants/assets/font_family.dart';
 import 'package:quick_pass/src/app/core/utils/colors/app_colors.dart';
 import 'package:quick_pass/src/app/features/profile/providers/theme_provider.dart';
 
@@ -40,7 +40,7 @@ class CustomText extends ConsumerWidget {
       style: TextStyle(
         height: height,
         decoration: decoration,
-        fontFamily: fontFamily ?? GoogleFonts.poppins().fontFamily,
+        fontFamily: fontFamily ?? FontFamily.poppins,
         decorationColor: decorationColor ?? AppColors.textSecondary,
         fontSize: fontSize ?? 16,
         color:

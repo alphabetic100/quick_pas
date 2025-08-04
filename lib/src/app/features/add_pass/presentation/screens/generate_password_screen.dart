@@ -38,7 +38,7 @@ class GeneratePasswordScreen extends ConsumerWidget {
                 text: "GENERATE NEW",
                 fontSize: 55,
                 fontFamily: FontFamily.bebasNeue,
-                color: AppColors.secondaryColor,
+                color: ThemePreferance.instance.isDarkMode? Colors.white: AppColors.secondaryColor,
               ),
 
               VerticalSpace(height: 40),
@@ -64,7 +64,7 @@ class GeneratePasswordScreen extends ConsumerWidget {
               SizedBox(height: 20),
               CustomText(
                 text: "PASSWORD LENGTH",
-                color: AppColors.secondaryColor,
+                color: ThemePreferance.instance.isDarkMode? Colors.white: AppColors.secondaryColor,
                 fontFamily: FontFamily.bebasNeue,
               ),
               CustomTextFormField(
@@ -120,7 +120,7 @@ class GeneratePasswordScreen extends ConsumerWidget {
 
               CustomText(
                 text: "INCLUDE SYMBOLS",
-                color: AppColors.secondaryColor,
+                color: ThemePreferance.instance.isDarkMode? Colors.white: AppColors.secondaryColor,
                 fontFamily: FontFamily.bebasNeue,
               ),
               CustomTextFormField(
