@@ -85,7 +85,7 @@ class CustomTextFormField extends StatelessWidget {
           filled: true,
           fillColor:
               ThemePreferance.instance.isDarkMode
-                  ? Colors.white.withValues(alpha: 0.2)
+                  ? Color(0xFF282828)
                   : Colors.white,
           prefixIcon:
               prefixIcon ??

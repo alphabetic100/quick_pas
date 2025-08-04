@@ -9,5 +9,5 @@ class AppColors {
   static const Color textSecondary = Color(0xFFBABABA);
 
   static const Color scaffoldBgLight = Colors.white;
-  static const Color scaffoldBgDark = Color(0xFF545974);
+  static const Color scaffoldBgDark = Color(0xFF121212);
 }

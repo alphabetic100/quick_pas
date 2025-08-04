@@ -13,6 +13,7 @@ import 'package:quick_pass/src/app/core/utils/sizes/screen_spacer.dart';
 import 'package:quick_pass/src/app/features/details&upgrade/controller/update_pass_controller.dart';
 import 'package:quick_pass/src/app/features/details&upgrade/presentation/screens/edit_pass_details_screen.dart';
 import 'package:quick_pass/src/app/features/home/data/home_pass_data_mode.dart';
+import 'package:quick_pass/src/app/features/home/providers/home_provider.dart';
 import 'package:quick_pass/src/app/service/theme_preferance.dart';
 
 class PassDetailsScreen extends ConsumerWidget {
@@ -22,6 +23,12 @@ class PassDetailsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final visibility = ref.watch(obsecurePrivider);
+    final passwordState = ref.watch(allPasswordProvider);
+    
+    // Find the updated password data from the provider
+    final currentPasswordData = passwordState.passwords
+        .where((p) => p.id == passwordData.id)
+        .firstOrNull ?? passwordData;
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
@@ -41,16 +48,16 @@ class PassDetailsScreen extends ConsumerWidget {
             children: [
               VerticalSpace(height: 30),
               CustomText(
-                text: PasswordAnalyzer.getPasswordStatusMessage(passwordData.password),
+                text: PasswordAnalyzer.getPasswordStatusMessage(currentPasswordData.password),
                 fontSize: 12,
                 fontWeight: FontWeight.normal,
-                color: PasswordAnalyzer.isPasswordCompromised(passwordData.password)
+                color: PasswordAnalyzer.isPasswordCompromised(currentPasswordData.password)
                     ? Colors.red
                     : Colors.green,
               ),
               VerticalSpace(height: 10),
               CustomText(
-                text: passwordData.name,
+                text: currentPasswordData.name,
                 fontFamily: FontFamily.bebasNeue,
                 fontSize: 40,
                 color:
@@ -61,22 +68,22 @@ class PassDetailsScreen extends ConsumerWidget {
               VerticalSpace(height: 30),
               _builtDetailCard(
                 icon: Icons.calendar_month,
-                value: AppHelper.formatDate(passwordData.createdAt),
+                value: AppHelper.formatDate(currentPasswordData.createdAt),
               ),
               VerticalSpace(height: 25),
               _builtDetailCard(
                 icon: Icons.link,
                 value:
-                    passwordData.url.isNotEmpty
-                        ? passwordData.url
+                    currentPasswordData.url.isNotEmpty
+                        ? currentPasswordData.url
                         : "Not Added",
               ),
               VerticalSpace(height: 25),
               _builtDetailCard(
                 icon: Icons.person_outline_rounded,
                 value:
-                    passwordData.email.isNotEmpty
-                        ? passwordData.email
+                    currentPasswordData.email.isNotEmpty
+                        ? currentPasswordData.email
                         : "Not Added",
               ),
 
@@ -87,9 +94,10 @@ class PassDetailsScreen extends ConsumerWidget {
                 visibility: visibility,
                 icon: Icons.lock_outline,
                 value:
-                    passwordData.password.isNotEmpty
-                        ? passwordData.password
+                    currentPasswordData.password.isNotEmpty
+                        ? currentPasswordData.password
                         : "Not Added",
+                passwordData: currentPasswordData,
               ),
             ],
           ),
@@ -127,7 +135,7 @@ class PassDetailsScreen extends ConsumerWidget {
                     context.push(EditPassDetailsScreen.routeName);
                     ref
                         .watch(updateControllers)
-                        .assignValue(password: passwordData);
+                        .assignValue(password: currentPasswordData);
                   },
                   title: "Update",
                 ),
@@ -145,6 +153,7 @@ class PassDetailsScreen extends ConsumerWidget {
     bool isPassField = false,
     bool visibility = false,
     WidgetRef? ref,
+    PasswordModel? passwordData,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -190,7 +199,7 @@ class PassDetailsScreen extends ConsumerWidget {
               ),
               IconButton(
                 onPressed: () {
-                  Clipboard.setData(ClipboardData(text: passwordData.password));
+                  Clipboard.setData(ClipboardData(text: passwordData?.password ?? value));
                 },
                 icon: Icon(Icons.copy, color: AppColors.primaryColor),
               ),

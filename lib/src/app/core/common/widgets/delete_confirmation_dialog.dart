@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:quick_pass/src/app/core/common/widgets/custom_button.dart';
+import 'package:quick_pass/src/app/core/common/widgets/custom_text.dart';
+import 'package:quick_pass/src/app/core/constants/assets/font_family.dart';
+import 'package:quick_pass/src/app/core/utils/colors/app_colors.dart';
 import 'package:quick_pass/src/app/service/theme_preferance.dart';
 
 class DeleteConfirmationDialog extends StatelessWidget {
@@ -21,138 +25,81 @@ class DeleteConfirmationDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Row(
-        children: [
-          Icon(
-            Icons.warning_amber_rounded,
-            color: Colors.red,
-            size: 24,
-          ),
-          SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              title,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+    return Dialog(
+      backgroundColor:
+          ThemePreferance.instance.isDarkMode
+              ? Color(0xFF282828)
+              : Colors.white,
+      child: Padding(
+        padding: EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CustomText(
+              text: "Delete Password!",
+              fontFamily: FontFamily.bebasNeue,
+              fontSize: 30,
+              color: ThemePreferance.instance.isDarkMode? Colors.white: AppColors.secondaryColor,
+            ),
+
+            SizedBox(height: 10),
+
+            CustomText(
+              text: "Are you sure! \nyou want to delete this password?",
+              textAlign: TextAlign.center,
+            ),
+
+            SizedBox(height: 12),
+            
+            Container(
+              padding: EdgeInsets.all(12),
+              decoration: BoxDecoration(
                 color: ThemePreferance.instance.isDarkMode
-                    ? Colors.white
-                    : Colors.black87,
+                    ? Colors.grey[800]
+                    : Colors.grey[100],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: CustomText(
+                text: itemName,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                textAlign: TextAlign.center,
               ),
             ),
-          ),
-        ],
-      ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            content,
-            style: TextStyle(
-              fontSize: 16,
-              color: ThemePreferance.instance.isDarkMode
-                  ? Colors.white70
-                  : Colors.black87,
-            ),
-          ),
-          SizedBox(height: 12),
-          Container(
-            padding: EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: ThemePreferance.instance.isDarkMode
-                  ? Colors.grey[800]
-                  : Colors.grey[100],
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Row(
+
+            SizedBox(height: 20),
+            Row(
               children: [
-                Icon(
-                  Icons.info_outline,
-                  size: 16,
-                  color: Colors.blue,
-                ),
-                SizedBox(width: 8),
                 Expanded(
-                  child: Text(
-                    itemName,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: ThemePreferance.instance.isDarkMode
-                          ? Colors.white
-                          : Colors.black87,
-                    ),
+                  child: CustomButton(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    title: cancelButtonText,
+                    color:
+                         ThemePreferance.instance.isDarkMode
+                          ? Colors.white.withValues(alpha: 0.2)
+                          : null,
+                  ),
+                ),
+                SizedBox(width: 12),
+
+                Expanded(
+                  child: CustomButton(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      onConfirm();
+                    },
+                    title: confirmButtonText,
+                    color: Colors.red,
+                    titleColor: Colors.white,
                   ),
                 ),
               ],
             ),
-          ),
-          SizedBox(height: 8),
-          Text(
-            'This action cannot be undone.',
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.red,
-              fontStyle: FontStyle.italic,
-            ),
-          ),
-        ],
-      ),
-      backgroundColor: ThemePreferance.instance.isDarkMode
-          ? Colors.grey[900]
-          : Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          style: TextButton.styleFrom(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          ),
-          child: Text(
-            cancelButtonText,
-            style: TextStyle(
-              color: ThemePreferance.instance.isDarkMode
-                  ? Colors.white70
-                  : Colors.grey[600],
-              fontSize: 16,
-            ),
-          ),
+          ],
         ),
-        ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-            onConfirm();
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.red,
-            foregroundColor: Colors.white,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.delete_forever, size: 18),
-              SizedBox(width: 4),
-              Text(
-                confirmButtonText,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
+      ),
     );
   }
 

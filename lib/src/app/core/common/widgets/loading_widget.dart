@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:quick_pass/src/app/core/common/widgets/custom_text.dart';
 import 'package:quick_pass/src/app/core/utils/colors/app_colors.dart';
+import 'package:quick_pass/src/app/service/theme_preferance.dart';
 
 class LoadingWidget {
   static void showLoading(BuildContext context) {
@@ -17,7 +18,7 @@ class LoadingWidget {
 
             margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 50 ),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: ThemePreferance.instance.isDarkMode? Color(0xFF282828): Colors.white,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Column(
@@ -28,11 +29,11 @@ class LoadingWidget {
                   color: AppColors.primaryColor,
                 ),
                 const SizedBox(height: 16),
-                const CustomText(
+                 CustomText(
                   text: 'Loading',
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  color: ThemePreferance.instance.isDarkMode? Colors.white: Colors.black,
                 ),
               ],
             ),
