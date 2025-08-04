@@ -22,8 +22,8 @@ class AppTheme {
     scaffoldBackgroundColor: AppColors.scaffoldBgDark,
     fontFamily: GoogleFonts.bebasNeue().fontFamily,
     appBarTheme: AppBarTheme(
-      backgroundColor: AppColors.secondaryColor,
-      surfaceTintColor: AppColors.secondaryColor,
+      backgroundColor: AppColors.scaffoldBgDark,
+      surfaceTintColor: AppColors.scaffoldBgDark,
     ),
   );
 }

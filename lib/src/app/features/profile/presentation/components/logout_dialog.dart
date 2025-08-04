@@ -16,7 +16,7 @@ class LogoutDialog extends StatelessWidget {
     return Dialog(
       backgroundColor:
           ThemePreferance.instance.isDarkMode
-              ? AppColors.scaffoldBgDark
+              ? Color(0xFF282828)
               : Colors.white,
       child: Padding(
         padding: EdgeInsets.all(20),
@@ -47,9 +47,9 @@ class LogoutDialog extends StatelessWidget {
                     },
                     title: "Cancel",
                     color:
-                        ThemePreferance.instance.isDarkMode
-                            ? AppColors.secondaryColor
-                            : null,
+                         ThemePreferance.instance.isDarkMode
+                          ? Colors.white.withValues(alpha: 0.2)
+                          : null,
                   ),
                 ),
                 SizedBox(width: 12),

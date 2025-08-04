@@ -62,6 +62,7 @@ class _PasswordCardState extends State<PasswordCard>
               decoration: BoxDecoration(
                 border: Border.all(color: AppColors.textSecondary),
                 borderRadius: BorderRadius.circular(25),
+                color: ThemePreferance.instance.isDarkMode? Color(0xFF3f3f3f).withValues(alpha: 0.2):null
               ),
               child: Row(
                 children: [
@@ -108,7 +109,7 @@ class _PasswordCardState extends State<PasswordCard>
                       });
                     },
                     borderRadius: BorderRadius.circular(20),
-                    child: Container(
+                    child: SizedBox(
                       width: 40,
                       height: 40,
                       child: Icon(
@@ -135,9 +136,9 @@ class _PasswordCardState extends State<PasswordCard>
                           end: Alignment.centerRight,
                           colors: [
                             Colors.transparent,
-                            AppColors.primaryColor.withOpacity(0.3),
-                            AppColors.primaryColor.withOpacity(0.6),
-                            AppColors.primaryColor.withOpacity(0.3),
+                            AppColors.primaryColor.withValues(alpha: 0.3),
+                            AppColors.primaryColor.withValues(alpha:  0.6),
+                            AppColors.primaryColor.withValues(alpha:  0.3),
                             Colors.transparent,
                           ],
                           stops: [0.0, 0.3, 0.5, 0.7, 1.0],

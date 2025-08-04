@@ -101,7 +101,7 @@ class UpdateProfileScreen extends ConsumerWidget {
                 CustomText(
                   text: "name",
                   fontFamily: FontFamily.bebasNeue,
-                  color: AppColors.secondaryColor,
+                  color: ThemePreferance.instance.isDarkMode? Colors.white: AppColors.secondaryColor,
                 ),
                 CustomTextFormField(controller: name, hintText: "Jhon Doe"),
                 VerticalSpace(height: MediaQuery.of(context).size.height * 0.2),
