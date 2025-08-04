@@ -96,7 +96,7 @@ class PasswordModel {
 
   /// Get decrypted password data
   Future<Map<String, String>> getDecryptedData() async {
-    if (encryptedPassword == null) {
+    if (encryptedPassword == null || encryptedPassword!.isEmpty) {
       // Fallback for non-encrypted data
       return {
         'password': password,
@@ -104,11 +104,29 @@ class PasswordModel {
       };
     }
     
-    final encryptionService = EncryptionService.instance;
-    return await encryptionService.decryptSensitiveData(
-      encryptedPassword: encryptedPassword!,
-      encryptedEmail: encryptedEmail,
-    );
+    try {
+      final encryptionService = EncryptionService.instance;
+      final decryptedData = await encryptionService.decryptSensitiveData(
+        encryptedPassword: encryptedPassword!,
+        encryptedEmail: encryptedEmail,
+      );
+      
+      // If decryption returns empty strings (corrupted data), use fallback
+      if (decryptedData['password']?.isEmpty == true) {
+        return {
+          'password': password.isNotEmpty ? password : 'Data corrupted',
+          'email': email,
+        };
+      }
+      
+      return decryptedData;
+    } catch (e) {
+      // If decryption fails completely, use fallback data
+      return {
+        'password': password.isNotEmpty ? password : 'Data corrupted',
+        'email': email,
+      };
+    }
   }
 
   /// Create a copy with decrypted data for display

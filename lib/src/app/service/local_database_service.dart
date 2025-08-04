@@ -24,8 +24,9 @@ class LocalDatabaseService {
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 2, // Updated version to trigger migration
       onCreate: _createDB,
+      onUpgrade: _upgradeDB,
     );
   }
 
@@ -47,6 +48,22 @@ class LocalDatabaseService {
       )
     ''');
     log("Local Database created with encryption support");
+  }
+
+  Future<void> _upgradeDB(Database db, int oldVersion, int newVersion) async {
+    log("Upgrading database from version $oldVersion to $newVersion");
+    
+    if (oldVersion < 2) {
+      // Add encrypted columns if they don't exist
+      try {
+        await db.execute('ALTER TABLE passwords ADD COLUMN encrypted_password TEXT');
+        await db.execute('ALTER TABLE passwords ADD COLUMN encrypted_email TEXT');
+        log("Added encrypted columns to existing database");
+      } catch (e) {
+        // Columns might already exist, log and continue
+        log("Encrypted columns may already exist: $e");
+      }
+    }
   }
 
   Future<void> insertPassword(PasswordModel password) async {

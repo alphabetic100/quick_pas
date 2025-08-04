@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:quick_pass/src/app/core/constants/assets/font_family.dart';
 import 'package:quick_pass/src/app/core/utils/colors/app_colors.dart';
 import 'package:quick_pass/src/app/service/theme_preferance.dart';
 
@@ -71,13 +71,15 @@ class CustomTextFormField extends StatelessWidget {
         maxLines: maxLines,
         keyboardType: keyboardType,
         inputFormatters: inputFormatters,
-        style: GoogleFonts.poppins(
+        style: TextStyle(
           fontSize: (16),
           fontWeight: FontWeight.w400,
           color:
               ThemePreferance.instance.isDarkMode
                   ? Colors.white
                   : AppColors.secondaryColor,
+                  fontFamily: FontFamily.poppins
+
         ),
         validator: validator,
         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -114,13 +116,15 @@ class CustomTextFormField extends StatelessWidget {
           suffixText: suffixText,
           suffixStyle:
               suffixTextStyle ??
-              GoogleFonts.poppins(
+           TextStyle(
+            fontFamily: FontFamily.poppins,
                 fontSize: (12),
                 fontWeight: FontWeight.w400,
                 color: AppColors.textSecondary,
               ),
           hintText: hintText,
-          hintStyle: GoogleFonts.poppins(
+          hintStyle: TextStyle(
+            fontFamily: FontFamily.poppins,
             fontSize: (hintTextSize ?? 15),
             fontWeight: FontWeight.w400,
             color:

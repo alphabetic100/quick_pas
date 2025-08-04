@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:quick_pass/src/app/core/constants/assets/font_family.dart';
 import 'package:quick_pass/src/app/core/utils/colors/app_colors.dart';
 
 class AppTheme {
@@ -9,7 +9,8 @@ class AppTheme {
     primaryColor: AppColors.primaryColor,
     colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
     scaffoldBackgroundColor: AppColors.scaffoldBgLight,
-    fontFamily: GoogleFonts.bebasNeue().fontFamily,
+  //  fontFamily: GoogleFonts.bebasNeue().fontFamily,
+  fontFamily: FontFamily.bebasNeue,
     appBarTheme: AppBarTheme(
       backgroundColor: Colors.white,
       surfaceTintColor: Colors.white,
@@ -20,7 +21,8 @@ class AppTheme {
     primaryColor: AppColors.scaffoldBgDark,
     colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
     scaffoldBackgroundColor: AppColors.scaffoldBgDark,
-    fontFamily: GoogleFonts.bebasNeue().fontFamily,
+  //  fontFamily: GoogleFonts.bebasNeue().fontFamily ,
+  fontFamily: FontFamily.bebasNeue,
     appBarTheme: AppBarTheme(
       backgroundColor: AppColors.scaffoldBgDark,
       surfaceTintColor: AppColors.scaffoldBgDark,
